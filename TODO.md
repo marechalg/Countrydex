@@ -10,7 +10,9 @@
 - [ ] Échange de drapeaux
 - [ ] Clear countrydex
 - [ ] Bruler drapeau pour en cheter d'autres
+- [ ] Readme
 - [ ] Suggestions (drapeau, fonctionnalité)
+- [ ] Stocker les drapeaux sur un serveur web
 - [ ] Ajout de drapeaux (+ secrets avec rare drop)
 - [ ] Taux de drop en fonction des saisons et continents
 - [ ] List
