@@ -1,21 +1,21 @@
-- [x] help
-- [x] ping
-- [x] clear
-- [x] utiliser des collections pour commands et events
-- [x] patch caractères
-- [x] catch non fonctionnel clear
+- [x] Help
+- [x] Ping
+- [x] Clear
+- [x] Utiliser des collections pour commands et events
+- [x] Patch caractères
+- [x] Catch non fonctionnel clear
 
-- [-] afficher le countrydex
-- [-] leaderboard de complétion
-- [-] échange de drapeaux
-- [-] clear countrydex
-- [-] bruler drapeau pour en cheter d'autres
-- [-] suggestions (drapeau, fonctionnalité)
-- [-] ajout de drapeaux (+ secrets avec rare drop)
-- [-] taux de drop en fonction des saisons et continents
-- [-] list
-- [-] publique
-- [-] opti spawn
-- [-] tos
-- [-] privacy policy
-- [-] verif
+- [ ] Afficher le countrydex
+- [ ] Leaderboard de complétion
+- [ ] Échange de drapeaux
+- [ ] Clear countrydex
+- [ ] Bruler drapeau pour en cheter d'autres
+- [ ] Suggestions (drapeau, fonctionnalité)
+- [ ] Ajout de drapeaux (+ secrets avec rare drop)
+- [ ] Taux de drop en fonction des saisons et continents
+- [ ] List
+- [ ] Publique
+- [ ] Opti spawn
+- [ ] Tos
+- [ ] Privacy policy
+- [ ] Verif
