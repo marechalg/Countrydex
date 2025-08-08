@@ -6,6 +6,7 @@
 - [x] Catch non fonctionnel clear
 
 - [ ] Afficher le countrydex
+- [ ] Ajouter une indentation et la date dans la db
 - [ ] Leaderboard de complétion
 - [ ] Échange de drapeaux
 - [ ] Clear countrydex
