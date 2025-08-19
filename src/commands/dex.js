@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require('discord.js');
 const fs = require('node:fs');
 const Vibrant = require('node-vibrant');
 
@@ -9,30 +9,34 @@ module.exports = {
         .setName('dex')
         .setDescription('Display the content of your Countrydex'),
     async execute(interaction, client) {
-        let embeds = [];
-
-        embeds.push(new EmbedBuilder()
-            .setAuthor({
-                name: `${interaction.user.tag}'s Countrydex`,
-                iconURL: `${images.DEX}`
-            })
-        )
-
+        const countries = JSON.parse(fs.readFileSync('data/countries.json', 'utf-8'));
         const dexs = JSON.parse(fs.readFileSync('data/countrydexs.json', 'utf-8'));
         const dex = dexs[interaction.user.id];
-        dex.forEach(dx => {
-            new Vibrant(`https://flagpedia.net/data/flags/w1160/${dx.code}.jpg`).getPalette().then(p => {
-                const color = p.Vibrant.hex;
-                embeds.push(new EmbedBuilder()
-                    .setColor(color)
-                    .setAuthor({
-                        iconURL: `https://flagpedia.net/data/flags/w1160/${dx.code}.jpg`,
-                        name: `${dx.name}`
-                    })
-                )
-            })
-        })
 
-        await interaction.reply({ embeds: [embeds] });
+        const embed = new EmbedBuilder()
+            .setAuthor({
+                name: `${interaction.user.tag}'s Countrydex`,
+                iconURL: `${images.DEX}`,
+            })
+            .addFields({
+                name: 'Collection',
+                value: `**${dex.length}**/${countries.length} (${((dex.length / countries.length ) * 100).toFixed(0)}%)`
+            })
+        
+        let rows = []
+        for (const f of dexs[interaction.user.id]) {
+            rows.push(new StringSelectMenuOptionBuilder()
+                .setLabel(`[${f.code}] ${f.name}`)
+                .setValue(`${f.code}`)
+            )
+        }
+
+        const row = new ActionRowBuilder().addComponents(new StringSelectMenuBuilder()
+            .setCustomId('dexList')
+            .setPlaceholder('List of collected flags')
+            .addOptions(rows)
+        )
+
+        await interaction.reply({ embeds: [embed], components: [row] });
     }
 }
