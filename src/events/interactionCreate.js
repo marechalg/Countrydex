@@ -1,7 +1,8 @@
-const { emojis } = require('../../data/utils.json');
+const { emojis, images } = require('../../data/utils.json');
 
 const {
-    ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle, InteractionType, ButtonStyle, EmbedBuilder, ButtonBuilder
+    ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle, InteractionType, ButtonStyle, EmbedBuilder, ButtonBuilder,
+    Utils
 } = require('discord.js');
 const fs = require('node:fs');
 
@@ -53,7 +54,7 @@ module.exports = {
 
                     let country = {
                         "name": data[interaction.channel.id].name,
-                        "code": data[interaction.channel.id].code
+                        "code": data[interaction.channel.id].code,
                     }
                     let dexs = JSON.parse(fs.readFileSync('data/countrydexs.json'));
                     if (dexs.hasOwnProperty(interaction.member.user.id)) {
@@ -78,6 +79,44 @@ module.exports = {
             } else {
                 interaction.reply(`this command doesnt exit`);
             }
+        }
+
+        if (interaction.isStringSelectMenu()) {
+            await interaction.deferUpdate();
+            const SELECT_ID = interaction.values[0];
+
+            const FLAG = JSON.parse(fs.readFileSync('data/countrydexs.json', 'utf-8'))[interaction.user.id].find(flag => flag.code === SELECT_ID);
+
+            interaction.message.edit({ embeds: [new EmbedBuilder()
+                .setAuthor({
+                    iconURL: `${images.GLOBE}`,
+                    name: `[${FLAG.code}] ${FLAG.name}`
+                })
+                .addFields([
+                    {
+                        name: 'Flag rank',
+                        value: '#69',
+                        inline: true
+                    }, {
+                        name: 'Rarity',
+                        value: 'bof',
+                        inline: true
+                    }, { name: '\u200b', value: '\u200b', inline: true }, {
+                        name: 'First time caught',
+                        value: 'après demain',
+                        inline: true
+                    }, {
+                        name: 'Last time caught',
+                        value: 'demain',
+                        inline: true
+                    }, {
+                        name: 'Count',
+                        value: 'pi',
+                        inline: false
+                    }
+                ])
+                .setImage(`https://flagpedia.net/data/flags/w1160/${SELECT_ID}.jpg`)
+            ], components: interaction.message.components })
         }
     }
 }
