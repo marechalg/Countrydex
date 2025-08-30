@@ -1,6 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require('discord.js');
 const fs = require('node:fs');
-const Vibrant = require('node-vibrant');
 
 const { images } = require('../../data/utils.json');
 
