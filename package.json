@@ -7,7 +7,7 @@
   },
   "author": "Li Koubra",
   "license": "ISC",
-  "description": "",
+  "description": "Pokémon-like with flags, hosted on Discord",
   "dependencies": {
     "deepl-node": "^1.16.0",
     "discord.js": "^14.18.0",
