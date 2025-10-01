@@ -42,7 +42,12 @@ function adlog(type, from, message) {
 }
 
 function neutralize(text) {
-    return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    return text
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '') // accents
+        .replace(/[-'''`\s]/g, '') // apostrophes, tirets et espaces
+        .replace()
+        .toLowerCase().trim();
 }
 
 function h(n) {
