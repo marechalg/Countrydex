@@ -7,10 +7,11 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('dex')
         .setDescription('Display the content of your Countrydex'),
-    async execute(interaction, client) {
+    async execute(interaction) {
         const countries = JSON.parse(fs.readFileSync('data/countries.json', 'utf-8'));
         const dexs = JSON.parse(fs.readFileSync('data/countrydexs.json', 'utf-8'));
         const dex = dexs[interaction.user.id];
+        const uniq = [...new Map(dex.map(item => [item.code, item])).values()];
 
         const embed = new EmbedBuilder()
             .setAuthor({
@@ -19,23 +20,22 @@ module.exports = {
             })
             .addFields({
                 name: 'Collection',
-                value: `**${dex.length}**/${countries.length} (${((dex.length / countries.length ) * 100).toFixed(0)}%)`
+                value: `**${uniq.length}**/${countries.length} (${((uniq.length / countries.length ) * 100).toFixed(0)}%)`
             })
         
         let rows = []
-        for (const f of dexs[interaction.user.id]) {
+        for (const f of uniq) {
             rows.push(new StringSelectMenuOptionBuilder()
                 .setLabel(`[${f.code}] ${f.name}`)
-                .setValue(`${f.code}`)
-            )
+                .setValue(`${f.code}`));
         }
 
-        const row = new ActionRowBuilder().addComponents(new StringSelectMenuBuilder()
+        const selectionMenu = new ActionRowBuilder().addComponents(new StringSelectMenuBuilder()
             .setCustomId('dexList')
             .setPlaceholder('List of collected flags')
             .addOptions(rows)
         )
 
-        await interaction.reply({ embeds: [embed], components: [row] });
+        await interaction.reply({ embeds: [embed], components: [selectionMenu] });
     }
 }
