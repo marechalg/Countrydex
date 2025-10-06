@@ -9,7 +9,7 @@
   "license": "ISC",
   "description": "Pokémon-like with flags, hosted on Discord",
   "dependencies": {
-    "deepl-node": "^1.16.0",
+    "deepl-node": "^1.19.1",
     "discord.js": "^14.22.1",
     "moment": "^2.30.1",
     "node-vibrant": "^3.2.1-alpha.1"
