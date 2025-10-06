@@ -21,7 +21,7 @@ module.exports = {
             let remainingTime = Math.round((goal - moment.now()) / 60000);
         
             client.user.setPresence({
-                activities: [{ name: `${remainingTime} min`, type: ActivityType.Competing }]
+                activities: [{ name: `${remainingTime} min`, type: ActivityType.Custom, state: `Spawning in ${remainingTime} min` }]
             });
         }, 1 * 60 * 1000);
         
