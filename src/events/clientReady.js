@@ -62,6 +62,6 @@ module.exports = {
                 fs.writeFileSync('data/backup/countrydexs.json', JSON.stringify(data, null, 4));
                 actual = moment.now();
             }
-        }, 1 * 60 * 1000);
+        }, 1 * 60 * 60 * 1000);
     }
 }
