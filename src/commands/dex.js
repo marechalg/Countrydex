@@ -11,6 +11,16 @@ module.exports = {
         const countries = JSON.parse(fs.readFileSync('data/countries.json', 'utf-8'));
         const dexs = JSON.parse(fs.readFileSync('data/countrydexs.json', 'utf-8'));
         const dex = dexs[interaction.user.id];
+
+        if (!dex) return interaction.reply({ embeds: [new EmbedBuilder()
+            .setColor('#ff0000')
+            .setAuthor({
+                iconURL: images.ERROR,
+                name: 'Database Error'
+            })
+            .setDescription('You didn\'t catch any flag')
+        ], ephemeral: true })
+
         const uniq = [...new Map(dex.map(item => [item.code, item])).values()];
 
         const embed = new EmbedBuilder()

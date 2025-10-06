@@ -1,10 +1,10 @@
 const { emojis, images } = require('../../data/utils.json');
 
 const {
-    ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle, InteractionType, ButtonStyle, EmbedBuilder, ButtonBuilder,
-    Utils
+    ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle, InteractionType, ButtonStyle, EmbedBuilder, ButtonBuilder
 } = require('discord.js');
 const fs = require('node:fs');
+const moment = require('moment');
 
 const { neutralize } = require('../functions');
 
@@ -33,13 +33,14 @@ module.exports = {
         if (interaction.type === InteractionType.ModalSubmit) {
             if (interaction.customId == 'guess_modal') {
                 const answer = interaction.fields.getTextInputValue('guess_input');
-                const data = JSON.parse(fs.readFileSync('data/spawns.json'));
-                if (neutralize(data[interaction.channel.id].name.toLowerCase()) == neutralize(answer.toLowerCase()) || neutralize(data[interaction.channel.id].code.toLowerCase()) == neutralize(answer.toLowerCase())) {
+                const spawns = JSON.parse(fs.readFileSync('data/spawns.json'));
+
+                if (neutralize(spawns[interaction.channel.id].name) == neutralize(answer) || neutralize(spawns[interaction.channel.id].code) == neutralize(answer)) {
                     const embed = new EmbedBuilder()
                         .setTitle(`Found by ${interaction.member.user.username}`)
-                        .setDescription(`The flag was **${data[interaction.channel.id].name}**`)
-                        .setImage(`https://flagpedia.net/data/flags/w1160/${data[interaction.channel.id].code}.webp`)
-                        .setColor(`${data[interaction.channel.id].color}`)
+                        .setDescription(`The flag was **${spawns[interaction.channel.id].name}**`)
+                        .setImage(`https://flagpedia.net/data/flags/w1160/${spawns[interaction.channel.id].code}.webp`)
+                        .setColor(`${spawns[interaction.channel.id].color}`)
                     const button = new ButtonBuilder()
                         .setCustomId('disabled_guess_button')
                         .setLabel('Guess')
@@ -49,14 +50,18 @@ module.exports = {
                     const row = new ActionRowBuilder().setComponents(button);
                     interaction.channel.lastMessage.edit({embeds: [embed], components: [row]});
 
-                    data[interaction.channel.id].solved = true;
-                    fs.writeFileSync('data/spawns.json', JSON.stringify(data, null, 4));
+                    spawns[interaction.channel.id].solved = true;
+                    fs.writeFileSync('data/spawns.json', JSON.stringify(spawns, null, 4));
+
+                    let dexs = JSON.parse(fs.readFileSync('data/countrydexs.json'));
 
                     let country = {
-                        "name": data[interaction.channel.id].name,
-                        "code": data[interaction.channel.id].code,
+                        "name": spawns[interaction.channel.id].name,
+                        "code": spawns[interaction.channel.id].code,
+                        "color": spawns[interaction.channel.id].color,
+                        "date": moment.now()
                     }
-                    let dexs = JSON.parse(fs.readFileSync('data/countrydexs.json'));
+                    
                     if (dexs.hasOwnProperty(interaction.member.user.id)) {
                         dexs[interaction.member.user.id].push(country);
                     } else {
@@ -84,8 +89,23 @@ module.exports = {
         if (interaction.isStringSelectMenu()) {
             await interaction.deferUpdate();
             const SELECT_ID = interaction.values[0];
+            const dexData = JSON.parse(fs.readFileSync('data/countrydexs.json', 'utf-8'))[interaction.user.id];
+            const flags = dexData.filter(flag => flag.code === SELECT_ID);
+            const FLAG = flags[0];
+            const count = flags.length;
+            const dates = flags.map(f => f.date).sort((a, b) => a - b);
+            const firstCaught = dates[0];
+            const lastCaught = dates[dates.length - 1];
 
-            const FLAG = JSON.parse(fs.readFileSync('data/countrydexs.json', 'utf-8'))[interaction.user.id].find(flag => flag.code === SELECT_ID);
+            let lb = [];
+            const dexs = JSON.parse(fs.readFileSync('data/countrydexs.json', 'utf-8'));
+            for (const [usr, dex] of Object.entries(dexs)) {
+                const flags = dex.filter(flag => flag.code === SELECT_ID);
+                let c = flags.length;
+                let firstDate = flags.length > 0 ? Math.min(...flags.map(f => f.date)) : Infinity;
+                lb.push({id: usr, count: c, firstCaught: firstDate});
+            }
+            lb.sort((a, b) => b.count - a.count || a.firstCaught - b.firstCaught);
 
             interaction.message.edit({ embeds: [new EmbedBuilder()
                 .setAuthor({
@@ -94,27 +114,25 @@ module.exports = {
                 })
                 .addFields([
                     {
-                        name: 'Flag rank',
-                        value: '#69',
-                        inline: true
-                    }, {
-                        name: 'Rarity',
-                        value: 'bof',
-                        inline: true
-                    }, { name: '\u200b', value: '\u200b', inline: true }, {
                         name: 'First time caught',
-                        value: 'après demain',
+                        value: `<t:${Math.floor(firstCaught / 1000)}:R>`,
                         inline: true
                     }, {
                         name: 'Last time caught',
-                        value: 'demain',
+                        value: `<t:${Math.floor(lastCaught / 1000)}:R>`,
+                        inline: true
+                    }, { name: '\u200b', value: '\u200b', inline: true }, 
+                    {
+                        name: 'Count',
+                        value: `**${count}**`,
                         inline: true
                     }, {
-                        name: 'Count',
-                        value: 'pi',
-                        inline: false
-                    }
+                        name: 'Flag rank',
+                        value: `#**${rank}**`,
+                        inline: true
+                    }, { name: '\u200b', value: '\u200b', inline: true }
                 ])
+                .setColor(`${FLAG.color}`)
                 .setImage(`https://flagpedia.net/data/flags/w1160/${SELECT_ID}.jpg`)
             ], components: interaction.message.components })
         }
