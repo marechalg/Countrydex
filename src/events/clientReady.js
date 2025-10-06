@@ -9,7 +9,7 @@ const countries = require('../../data/countries.json');
 const { emojis } = require('../../data/utils.json');
 
 module.exports = {
-    name: 'ready',
+    name: 'clientReady',
     once: true,
     execute(args, client) {
         adlog('log', 'discord', `Connected to ${client.user.tag}`);
@@ -62,6 +62,6 @@ module.exports = {
                 fs.writeFileSync('data/backup/countrydexs.json', JSON.stringify(data, null, 4));
                 actual = moment.now();
             }
-        }, 1 * 60 * 60 * 1000);
+        }, 1 * 60 * 1000);
     }
 }
