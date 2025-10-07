@@ -3,10 +3,11 @@ const fs = require('node:fs');
 const vibrant = require('node-vibrant');
 const moment = require('moment');
 
-const { adlog } = require('../functions');
+const { adlog, h } = require('../functions');
 
 const countries = require('../../data/countries.json');
 const { emojis } = require('../../data/utils.json');
+const { spawnDelay } = require('../../data/config.json');
 
 module.exports = {
     name: 'clientReady',
@@ -26,7 +27,7 @@ module.exports = {
         }, 1 * 60 * 1000);
         
         const spawnInterval = setInterval(() => {
-            let goal = actual + 60 * 60 * 1000;
+            let goal = actual * h(spawnDelay);
         
             client.channels.cache.filter(chnl => chnl.name.toLowerCase().includes('spawning')).forEach(spawn => {
                 let data = JSON.parse(fs.readFileSync('data/spawns.json'));
@@ -62,6 +63,6 @@ module.exports = {
                 fs.writeFileSync('data/backup/countrydexs.json', JSON.stringify(data, null, 4));
                 actual = moment.now();
             }
-        }, 1 * 60 * 60 * 1000);
+        }, h(spawnDelay));
     }
 }
