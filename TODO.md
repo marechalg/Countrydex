@@ -1,24 +1,26 @@
 - [x] Help
 - [x] Ping
 - [x] Clear
-- [x] Utiliser des collections pour commands et events
-- [x] Patch caractères
-- [x] Catch non fonctionnel clear
-- [X] Afficher le countrydex
-- [X] Ajouter la date dans la db
+- [x] Collections usage for commands and events
+- [x] Cracters patch
+- [x] Non-working catch on clear command 
+- [X] Display countrydex
+- [X] Add the catch date in the db
 
-- [ ] Leaderboard de complétion
-- [ ] Échange de drapeaux
-- [ ] Clear countrydex
-- [ ] Bruler drapeau pour en cheter d'autres
 - [ ] Readme
-- [ ] Suggestions (drapeau, fonctionnalité)
-- [ ] Stocker les drapeaux sur un serveur web
-- [ ] Ajout de drapeaux (+ secrets avec rare drop)
-- [ ] Taux de drop en fonction des saisons et continents
-- [ ] List
-- [ ] Publique
-- [ ] Opti spawn
-- [ ] Tos
+- [ ] Beta ending
+- [ ] Leaderboard
+- [ ] Flag trading
+- [ ] Clear countrydex
+- [ ] List flags
+- [ ] Rarity
+- [ ] Burn a flag to buy another
+- [ ] Suggestions command
+- [ ] Host images on a webserver
+- [ ] Add flags / coat of arms...
+- [ ] Seasonal drop rates
+- [ ] Public
+- [ ] Spawn optimization
+- [ ] ToS
 - [ ] Privacy policy
-- [ ] Verif
+- [ ] Verification
