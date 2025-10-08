@@ -41,7 +41,7 @@ module.exports = {
         }
 
         const selectionMenu = new ActionRowBuilder().addComponents(new StringSelectMenuBuilder()
-            .setCustomId('dexList')
+            .setCustomId(`dex_${interaction.user.id}`)
             .setPlaceholder('List of collected flags')
             .addOptions(rows)
         )

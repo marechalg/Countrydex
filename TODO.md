@@ -6,6 +6,7 @@
 - [x] Non-working catch on clear command 
 - [X] Add the catch date in the db
 
+- [ ] Dex list menu pagination
 - [ ] Display countrydex
 - [ ] Readme
 - [ ] Beta ending

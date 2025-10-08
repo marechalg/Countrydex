@@ -29,12 +29,12 @@ module.exports = {
         const spawnInterval = setInterval(() => {
             let goal = actual + h(backupDelay);
         
-            client.channels.cache.filter(chnl => chnl.name.toLowerCase().includes('spawning')).forEach(spawn => {
+            client.channels.cache.filter(chnl => chnl.name.toLowerCase().includes('spawning')).forEach(async spawn => {
                 let data = JSON.parse(fs.readFileSync('data/spawns.json'));
-                if (spawn.lastMessage) {
-                    if (!data[spawn.id].solved) {
-                        spawn.lastMessage.delete();
-                    }
+                if (!data[spawn.id].solved) {
+                    spawn.messages.fetch(data[spawn.id].messageId)
+                        .then(msg => msg.delete())
+                        .catch(() => {});
                 }
         
                 const country = countries[Math.floor(Math.random() * countries.length)];
@@ -50,11 +50,11 @@ module.exports = {
                         .setStyle(ButtonStyle.Secondary)
                         .setEmoji(`${emojis.MAG}`);
                     const row = new ActionRowBuilder().addComponents(button);
-        
-                    data[spawn.id] = { name: country.name, code: country.code, color: color, messageId: spawn.id, solved: false };
-                    fs.writeFileSync('data/spawns.json', JSON.stringify(data, null, 4));
-        
-                    spawn.send({ embeds: [embed], components: [row] });
+                    spawn.send({ embeds: [embed], components: [row] }).then(msg => {
+                        data[spawn.id] = { name: country.name, code: country.code, color: color, messageId: msg.id, solved: false };
+                        fs.writeFileSync('data/spawns.json', JSON.stringify(data, null, 4));
+                    })
+                    
                 });
             });
         
@@ -63,6 +63,6 @@ module.exports = {
                 fs.writeFileSync('data/backup/countrydexs.json', JSON.stringify(data, null, 4));
                 actual = moment.now();
             }
-        }, h(spawnDelay));
+        }, m(spawnDelay));
     }
 }
