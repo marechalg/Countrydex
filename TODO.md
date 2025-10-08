@@ -9,6 +9,7 @@
 
 - [ ] Readme
 - [ ] Beta ending
+- [ ] Split interactionCreate.js
 - [ ] Leaderboard
 - [ ] Flag trading
 - [ ] Clear countrydex
