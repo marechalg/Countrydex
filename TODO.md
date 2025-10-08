@@ -4,9 +4,9 @@
 - [x] Collections usage for commands and events
 - [x] Cracters patch
 - [x] Non-working catch on clear command 
-- [X] Display countrydex
 - [X] Add the catch date in the db
 
+- [ ] Display countrydex
 - [ ] Readme
 - [ ] Beta ending
 - [ ] Split interactionCreate.js
