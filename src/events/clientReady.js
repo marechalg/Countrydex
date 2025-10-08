@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const vibrant = require('node-vibrant');
 const moment = require('moment');
 
-const { adlog, h } = require('../functions');
+const { adlog, m, h } = require('../functions');
 
 const countries = require('../../data/countries.json');
 const { emojis } = require('../../data/utils.json');
