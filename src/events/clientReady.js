@@ -7,7 +7,7 @@ const { adlog, h } = require('../functions');
 
 const countries = require('../../data/countries.json');
 const { emojis } = require('../../data/utils.json');
-const { spawnDelay } = require('../../data/config.json');
+const { spawnDelay, backupDelay } = require('../../data/config.json');
 
 module.exports = {
     name: 'clientReady',
@@ -18,16 +18,16 @@ module.exports = {
         let actual = moment.now();
 
         const updatePresenceInterval = setInterval(() => {
-            let goal = actual + 60 * 60 * 1000;
+            let goal = actual + h(spawnDelay);
             let remainingTime = Math.round((goal - moment.now()) / 60000);
         
             client.user.setPresence({
                 activities: [{ name: `${remainingTime} min`, type: ActivityType.Custom, state: `Spawning in ${remainingTime} min` }]
             });
-        }, 1 * 60 * 1000);
+        }, m(1));
         
         const spawnInterval = setInterval(() => {
-            let goal = actual * h(spawnDelay);
+            let goal = actual + h(backupDelay);
         
             client.channels.cache.filter(chnl => chnl.name.toLowerCase().includes('spawning')).forEach(spawn => {
                 let data = JSON.parse(fs.readFileSync('data/spawns.json'));
