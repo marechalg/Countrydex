@@ -4,9 +4,9 @@
 - [x] Utiliser des collections pour commands et events
 - [x] Patch caractères
 - [x] Catch non fonctionnel clear
+- [X] Afficher le countrydex
+- [X] Ajouter la date dans la db
 
-- [ ] Afficher le countrydex
-- [ ] Ajouter une indentation et la date dans la db
 - [ ] Leaderboard de complétion
 - [ ] Échange de drapeaux
 - [ ] Clear countrydex
