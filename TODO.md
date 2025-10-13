@@ -5,10 +5,11 @@
 - [x] Cracters patch
 - [x] Non-working catch on clear command 
 - [X] Add the catch date in the db
+- [X] Spawn optimization
+- [X] Change backup system
+- [X] Display countrydex
 
-- [ ] Change backup system
 - [ ] Dex list menu pagination
-- [ ] Display countrydex
 - [ ] Readme
 - [ ] Beta ending
 - [ ] Split interactionCreate.js
@@ -23,7 +24,6 @@
 - [ ] Add flags / coat of arms...
 - [ ] Seasonal drop rates
 - [ ] Public
-- [ ] Spawn optimization
 - [ ] ToS
 - [ ] Privacy policy
 - [ ] Verification
