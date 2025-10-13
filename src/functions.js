@@ -65,7 +65,7 @@ function s(n) {
 // DELAYs
 function spawnTime() {
     const now = moment();
-    const next = now.hours(spawnHours);
+    const next = moment().minutes(spawnMinute).seconds(0).milliseconds(0);
     if (now.minutes() >= spawnMinute) {
         next.add(1, 'h');
     }
@@ -73,7 +73,7 @@ function spawnTime() {
 }
 function backupTime() {
     const now = moment();
-    const next = now.hours(backupHours);
+    const next = moment().hours(backupHour).minutes(0).seconds(0).milliseconds(0);
     if (now.hours() >= backupHour) {
         next.add(1, 'd');
     }
