@@ -1,7 +1,6 @@
 const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle, ActivityType } = require('discord.js');
 const fs = require('node:fs');
 const vibrant = require('node-vibrant');
-const moment = require('moment');
 
 const { adlog, m, h, spawnTime, backupTime } = require('../functions');
 

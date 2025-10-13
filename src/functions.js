@@ -1,7 +1,7 @@
 //CONST
 const moment = require('moment');
 
-const { spawnHours, spawnMinute, backupHours, backupHour } = require('../data/config.json');
+const { spawnMinute, backupHour } = require('../data/config.json');
 
 //EXPORT
 module.exports = {
