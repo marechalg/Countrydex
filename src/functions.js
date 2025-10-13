@@ -1,9 +1,11 @@
 //CONST
 const moment = require('moment');
 
+const { spawnHours, spawnMinute, backupHours, backupHour } = require('../data/config.json');
+
 //EXPORT
 module.exports = {
-    adlog, neutralize, h, m, s
+    adlog, neutralize, h, m, s, spawnTime, backupTime
 }
 
 //ADVANCED LOG SYSTEM
@@ -16,7 +18,6 @@ const colors = {
     error: "\x1b[31m", //red
     debug: "\x1b[35m" //magenta
 };
-
 function adlog(type, from, message) {
     const hour = moment().format('DD/MM/YYYY_HH:mm:ss');
     const msg = `${`[${hour}-${from}]:`.padEnd(LOG_NORMALIZER)} ${message}`;
@@ -41,14 +42,16 @@ function adlog(type, from, message) {
     }
 }
 
+// NORMALIZATION
 function neutralize(text) {
     return text
         .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '') // accents
-        .replace(/[-'''`\s]/g, '') // apostrophes, tirets et espaces
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[-'''`\s]/g, '')
         .toLowerCase().trim();
 }
 
+// TIME CONVERTER
 function h(n) {
     return n * 60 * 60 * 1000;
 }
@@ -57,4 +60,22 @@ function m(n) {
 }
 function s(n) {
     return n * 1000;
+}
+
+// DELAYs
+function spawnTime() {
+    const now = moment();
+    const next = now.hours(spawnHours);
+    if (now.minutes() >= spawnMinute) {
+        next.add(1, 'h');
+    }
+    return next.diff(now);
+}
+function backupTime() {
+    const now = moment();
+    const next = now.hours(backupHours);
+    if (now.hours() >= backupHour) {
+        next.add(1, 'd');
+    }
+    return next.diff(now);
 }
