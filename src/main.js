@@ -3,7 +3,7 @@ const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10');
 const fs = require('node:fs');
 
-const { adlog } = require('./functions');
+const { adlog, m } = require('./functions');
 
 const { keys, ids } = require('../data/config.json');
 
@@ -11,7 +11,7 @@ console.clear(), adlog('info', 'node', 'Executing...');
 
 //LOGIN
 adlog('info', 'discord', 'Connecting...');
-const client = new Client({ intents: [keys.DISCORD_INTENTS] });
+const client = new Client({ intents: [keys.DISCORD_INTENTS], rest: { timeout: m(1) } });
 client.login(keys.DISCORD_TOKEN).catch(err => console.error(err));
 
 //EVENTS HANDLING
