@@ -88,74 +88,69 @@ module.exports = {
         }
 
         if (interaction.isStringSelectMenu()) {
-    await interaction.deferUpdate();
-    const SELECT_ID = interaction.values[0];
+            await interaction.deferUpdate();
+            const SELECT_ID = interaction.values[0];
     
-    // Récupérer l'ID du propriétaire du dex depuis le message
-    // (il faut stocker cet ID quelque part, par exemple dans le customId du select menu)
-    // Option 1: Si l'ID est dans le customId du select menu (format: "dex_userId")
-    const ownerId = interaction.customId.split('_')[1] || interaction.user.id;
+            const ownerId = interaction.customId.split('_')[1] || interaction.user.id;
     
-    const dexData = JSON.parse(fs.readFileSync('data/countrydexs.json', 'utf-8'))[ownerId];
+            const dexData = JSON.parse(fs.readFileSync('data/countrydexs.json', 'utf-8'))[ownerId];
     
-    // Vérifier si l'utilisateur a ce drapeau
-    if (!dexData) {
-        return interaction.followUp({ content: 'Dex data not found.', ephemeral: true });
-    }
+            if (!dexData) {
+                return interaction.followUp({ content: 'Dex data not found.', ephemeral: true });
+            }
     
-    const flags = dexData.filter(flag => flag.code === SELECT_ID);
+            const flags = dexData.filter(flag => flag.code === SELECT_ID);
     
-    if (flags.length === 0) {
-        return interaction.followUp({ content: 'This flag was not found in this dex.', ephemeral: true });
-    }
+            if (flags.length === 0) {
+                return interaction.followUp({ content: 'This flag was not found in this dex.', ephemeral: true });
+            }
     
-    const FLAG = flags[0];
-    const count = flags.length;
-    const dates = flags.map(f => f.date).sort((a, b) => a - b);
-    const firstCaught = dates[0];
-    const lastCaught = dates[dates.length - 1];
+            const FLAG = flags[0];
+            const count = flags.length;
+            const dates = flags.map(f => f.date).sort((a, b) => a - b);
+            const firstCaught = dates[0];
+            const lastCaught = dates[dates.length - 1];
 
-    let lb = [];
-    const dexs = JSON.parse(fs.readFileSync('data/countrydexs.json', 'utf-8'));
-    for (const [usr, dex] of Object.entries(dexs)) {
-        const flags = dex.filter(flag => flag.code === SELECT_ID);
-        let c = flags.length;
-        let firstDate = flags.length > 0 ? Math.min(...flags.map(f => f.date)) : Infinity;
-        lb.push({id: usr, count: c, firstCaught: firstDate});
-    }
-    lb.sort((a, b) => b.count - a.count || a.firstCaught - b.firstCaught);
-    
-    // Chercher le rang du propriétaire du dex, pas de celui qui clique
-    const rank = lb.findIndex(entry => entry.id === ownerId) + 1;
+            let lb = [];
+            const dexs = JSON.parse(fs.readFileSync('data/countrydexs.json', 'utf-8'));
+            for (const [usr, dex] of Object.entries(dexs)) {
+                const flags = dex.filter(flag => flag.code === SELECT_ID);
+                let c = flags.length;
+                let firstDate = flags.length > 0 ? Math.min(...flags.map(f => f.date)) : Infinity;
+                lb.push({id: usr, count: c, firstCaught: firstDate});
+            }
+            lb.sort((a, b) => b.count - a.count || a.firstCaught - b.firstCaught);
 
-    interaction.message.edit({ embeds: [new EmbedBuilder()
-        .setAuthor({
-            iconURL: `${images.GLOBE}`,
-            name: `[${FLAG.code}] ${FLAG.name}`
-        })
-        .addFields([
-            {
-                name: 'First time caught',
-                value: `<t:${Math.floor(firstCaught / 1000)}:R>`,
-                inline: true
-            }, {
-                name: 'Last time caught',
-                value: `<t:${Math.floor(lastCaught / 1000)}:R>`,
-                inline: true
-            }, { name: '\u200b', value: '\u200b', inline: true }, 
-            {
-                name: 'Count',
-                value: `**${count}**`,
-                inline: true
-            }, {
-                name: 'Flag rank',
-                value: `#**${rank}**`,
-                inline: true
-            }, { name: '\u200b', value: '\u200b', inline: true }
-        ])
-        .setColor(`${FLAG.color}`)
-        .setImage(`https://flagpedia.net/data/flags/w1160/${SELECT_ID}.jpg`)
-    ], components: interaction.message.components })
-}
+            const rank = lb.findIndex(entry => entry.id === ownerId) + 1;
+
+            interaction.message.edit({ embeds: [new EmbedBuilder()
+                .setAuthor({
+                    iconURL: `${images.GLOBE}`,
+                    name: `[${FLAG.code}] ${FLAG.name}`
+                })
+                .addFields([
+                    {
+                        name: 'First time caught',
+                        value: `<t:${Math.floor(firstCaught / 1000)}:R>`,
+                        inline: true
+                    }, {
+                        name: 'Last time caught',
+                        value: `<t:${Math.floor(lastCaught / 1000)}:R>`,
+                        inline: true
+                    }, { name: '\u200b', value: '\u200b', inline: true }, 
+                    {
+                        name: 'Count',
+                        value: `**${count}**`,
+                        inline: true
+                    }, {
+                        name: 'Flag rank',
+                        value: `#**${rank}**`,
+                        inline: true
+                    }, { name: '\u200b', value: '\u200b', inline: true }
+                ])
+                .setColor(`${FLAG.color}`)
+                .setImage(`https://flagpedia.net/data/flags/w1160/${SELECT_ID}.jpg`)
+            ], components: interaction.message.components })
+        }
     }
 }
