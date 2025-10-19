@@ -18,7 +18,7 @@ const colors = {
     error: "\x1b[31m", //red
     debug: "\x1b[35m" //magenta
 };
-function adlog(type: string, from: string, message: any) {
+function adlog(type, from, message) {
     const hour = moment().format('DD/MM/YYYY_HH:mm:ss');
     const msg = `${`[${hour}-${from}]:`.padEnd(LOG_NORMALIZER)} ${message}`;
     switch(type) {
@@ -43,7 +43,7 @@ function adlog(type: string, from: string, message: any) {
 }
 
 // NORMALIZATION
-function neutralize(text: string): string {
+function neutralize(text) {
     return text
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '')
@@ -52,18 +52,18 @@ function neutralize(text: string): string {
 }
 
 // TIME CONVERTER
-function h(n: number): number {
+function h(n) {
     return n * 60 * 60 * 1000;
 }
-function m(n: number): number {
+function m(n) {
     return n * 60 * 1000;
 }
-function s(n: number): number {
+function s(n) {
     return n * 1000;
 }
 
 // DELAYs
-function spawnTime(): number {
+function spawnTime() {
     const now = moment();
     const next = moment().minutes(spawnMinute).seconds(0).milliseconds(0);
     if (now.minutes() >= spawnMinute) {
@@ -71,7 +71,7 @@ function spawnTime(): number {
     }
     return next.diff(now);
 }
-function backupTime(): number {
+function backupTime() {
     const now = moment();
     const next = moment().hours(backupHour).minutes(0).seconds(0).milliseconds(0);
     if (now.hours() >= backupHour) {
