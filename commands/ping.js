@@ -1,5 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, Embed } = require('discord.js');
-const moment = require('moment');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 const { images } = require('../../data/utils.json');
 

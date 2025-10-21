@@ -8,13 +8,11 @@ const fs = require('node:fs');
 
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
-const translateCountries = async () => {
+async () => {
     const translatedCountries = [];
-
     for (let i = 0; i < countries.length; i++) {
         const country = countries[i];
         console.log(`Treating (${i + 1}/${countries.length}) : ${country.name}`);
-        
         try {
             const result = await tl.translateText(country.name, null, 'fr');
             country.name = result.text;
@@ -24,12 +22,8 @@ const translateCountries = async () => {
             console.error(`Error translating ${country.name}:`, error);
             translatedCountries.push(country);
         }
-
         await delay(1000);
     }
-
     fs.writeFileSync('data/countries.json', JSON.stringify(translatedCountries, null, 4));
     console.log('All flags treated');
 }
-
-translateCountries();

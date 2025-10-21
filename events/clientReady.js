@@ -59,8 +59,8 @@ module.exports = {
 
         setTimeout(() => {
             spawnCountry();
-            setInterval(spawnCountry, h(1));
-        }, spawnTime());
+            setInterval(spawnCountry, m(1));
+        }, 0);
 
         setTimeout(() => {
             backup();
