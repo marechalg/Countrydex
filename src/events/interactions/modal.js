@@ -47,5 +47,6 @@ module.exports = {
                 fs.writeFileSync('data/countrydexs.json', JSON.stringify(dexs, null, 2));
             }
         }
+        interaction.deferUpdate();
     }
 }
