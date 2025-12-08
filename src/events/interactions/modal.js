@@ -1,9 +1,9 @@
 const fs = require('node:fs');
 const moment = require('moment');
-const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
+const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, MessageFlags } = require('discord.js');
 
 const { neutralize } = require('../../functions');
-const { emojis } = require('../../../data/utils.json');
+const { emojis, images } = require('../../../data/utils.json');
 
 module.exports = {
     async execute(interaction, cllient) {
@@ -45,8 +45,18 @@ module.exports = {
                     dexs[interaction.member.user.id] = [country];
                 }
                 fs.writeFileSync('data/countrydexs.json', JSON.stringify(dexs, null, 2));
+
+                interaction.deferUpdate();
+            } else {
+                interaction.reply({ embeds: [new EmbedBuilder()
+                    .setColor('#ff0000')
+                    .setAuthor({
+                        iconURL: `${images.ERROR}`,
+                        name: 'Failed'
+                    })
+                    .setDescription(`**${answer}** isn't a correct guess`)
+                ], flags: MessageFlags.Ephemeral } );
             }
         }
-        interaction.deferUpdate();
     }
 }
