@@ -18,6 +18,4 @@ git pull https://github.com/marechalg/Countrydex.git -f
 npm init -y
 npm i discord.js moment node-vibrant@valpha-3.2.1
 
-cp /home/rasp/Desktop/countrydex/config.json /home/rasp/Desktop/countrydex/Countrydex/data/config.json
-
 node .

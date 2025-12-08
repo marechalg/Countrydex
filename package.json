@@ -4,14 +4,12 @@
     "version": "0.0.0",
     "author": "Li Koubra",
     "license": "MIT",
-
     "main": "src/main.js",
     "scripts": {
         "test": "echo \"Pas de script de tests\"",
         "start": "node .",
         "lint": "echo \"Pas d'outil de lint\""
     },
-
     "repository": {
         "type": "git",
         "url": "https://github.com/marechalg/Countrydex.git"
@@ -20,10 +18,9 @@
         "url": "https://github.com/marechalg/Countrydex/issues"
     },
     "homepage": "https://github.com/marechalg/Countrydex",
-
     "dependencies": {
-        "deepl-node": "^1.20.0",
-        "discord.js": "^14.22.1",
+        "deepl-node": "^1.22.0",
+        "discord.js": "^14.25.1",
         "moment": "^2.30.1",
         "node-vibrant": "^3.2.1-alpha.1"
     }
