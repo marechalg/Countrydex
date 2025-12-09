@@ -40,6 +40,23 @@ module.exports = {
         let components = []
 
         const pages = Math.ceil(uniq.length / 25);
+
+        let rows = []
+
+        for (const f of uniq) {
+            rows.push(new StringSelectMenuOptionBuilder()
+                .setLabel(`[${f.code}] ${f.name}`)
+                .setValue(`${f.code}`)
+            )
+        }
+
+        const selectionMenu = new ActionRowBuilder().addComponents(new StringSelectMenuBuilder()
+            .setCustomId(`dex_${interaction.user.id}_${page}`)
+            .setPlaceholder('List of collected flags')
+            .addOptions(rows)
+        )
+
+        components.push(selectionMenu);
         
         if (pages > 1) {
             uniq = uniq.slice(0, 25);
@@ -57,23 +74,6 @@ module.exports = {
                     .setStyle(ButtonStyle.Primary)
                     .setDisabled(false)
             )
-
-        let rows = []
-
-        for (const f of uniq) {
-            rows.push(new StringSelectMenuOptionBuilder()
-                .setLabel(`[${f.code}] ${f.name}`)
-                .setValue(`${f.code}`)
-            )
-        }
-        
-        const selectionMenu = new ActionRowBuilder().addComponents(new StringSelectMenuBuilder()
-            .setCustomId(`dex_${interaction.user.id}_${page}`)
-            .setPlaceholder('List of collected flags')
-            .addOptions(rows)
-        )
-
-        components.push(selectionMenu);
 
             components.push(navigationRow);
         }
