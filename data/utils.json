@@ -1,0 +1,16 @@
+{
+    "emojis": {
+        "MAG": "🔍"
+    },
+    "images": {
+        "ERROR": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2017%2F02%2F12%2F21%2F29%2Ffalse-2061131_960_720.png&f=1&nofb=1&ipt=76bee01dbffd75d0114791a56493c8a6d6055df260b76dce306b691ecce27c64&ipo=images",
+        "DEX": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.icon-icons.com%2Ficons2%2F2551%2FPNG%2F96%2Fcollection_icon_152879.png&f=1&nofb=1&ipt=6ba7c86b0e1e701d11cb73bc4e3701d375c0d1c602726525a96e8bb29e9fabdf",
+        "HELP": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pngplay.com%2Fwp-content%2Fuploads%2F5%2FQuestion-Mark-Symbol-Transparent-Image.png&f=1&nofb=1&ipt=0ae4db68f06c2802fca93933562c8cc24b16b310b9c39d25a4f8ba5be37afad4",
+        "LOAD": "https://discuss.wxpython.org/uploads/default/original/2X/6/6d0ec30d8b8f77ab999f765edd8866e8a97d59a3.gif",
+        "CONNECTION": "https://i.pinimg.com/originals/0c/33/a2/0c33a290dc8a0effa8f4b7cea35d3ea5.gif",
+        "SUCCESS": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F010%2F152%2F436%2Foriginal%2Ftick-check-mark-icon-sign-symbol-design-free-png.png&f=1&nofb=1&ipt=a241957335eb93c3abf86879718b00436a7bd01dcaf2664059bf3355ecc15d09",
+        "LIST": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fopenclipart.org%2Fimage%2F2400px%2Fsvg_to_png%2F33265%2FListe.png&f=1&nofb=1&ipt=def515c128885df74cac807625bcda30259962239e2755da916fce897a261166",
+        "GLOBE": "https://cdn-icons-png.flaticon.com/256/744/744480.png",
+        "PODIUM": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn-icons-png.flaticon.com%2F512%2F5250%2F5250796.png&f=1&nofb=1&ipt=fe734bff4ee04561bd0c4670273e561bf86dc9cc0b5ca086e607f960a60c902f"
+    }
+}

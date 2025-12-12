@@ -1,2 +1,5 @@
-/data
+backup/
+config.*
+/data/countrydexs.json
+/data/spawns.json
 /node_modules
