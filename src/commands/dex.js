@@ -17,13 +17,16 @@ module.exports = {
         let page = 0;
 
         if (!dex) return interaction.reply({ embeds: [new EmbedBuilder()
-            .setColor('#ff0000')
             .setAuthor({
-                iconURL: images.ERROR,
-                name: 'Database Error'
+                name: `${interaction.user.tag}'s Countrydex`,
+                iconURL: images.DEX,
+            })
+            .addFields({
+                name: 'Collection',
+                value: `**0**/${countries.length} (0%)`
             })
             .setDescription('You didn\'t catch any flag')
-        ], ephemeral: true })
+        ] })
 
         let uniq = [...new Map(dex.map(item => [item.code, item])).values()].sort((a, b) => a.name.localeCompare(b.name));
         const embed = new EmbedBuilder()
