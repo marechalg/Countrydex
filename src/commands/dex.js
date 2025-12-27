@@ -46,7 +46,7 @@ module.exports = {
 
         let rows = []
 
-        for (const f of uniq) {
+        for (const f of uniq.slice(0, 25)) {
             rows.push(new StringSelectMenuOptionBuilder()
                 .setLabel(`[${f.code}] ${f.name}`)
                 .setValue(`${f.code}`)
