@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle, PremiumButtonBuilder } = require('discord.js');
 const fs = require('node:fs');
 
 const { images } = require('../../data/utils.json');
@@ -33,7 +33,7 @@ module.exports = {
         ;
         
         let i = 1;
-        for (const userInfos  of leaderboard) {
+        for (const userInfos of leaderboard) {
             let place;
             switch (i) {
                 case 1:
@@ -58,6 +58,24 @@ module.exports = {
             i++;
         }
 
-        interaction.reply({ embeds: [embed] });
+        const bar = new ActionRowBuilder().addComponents(
+            new ButtonBuilder()
+                .setCustomId('lb_completion')
+                .setLabel('Completionnist')
+                .setStyle(ButtonStyle.Secondary)
+                .setDisabled(true),
+            new ButtonBuilder()
+                .setCustomId('lb_collection')
+                .setLabel('Collector')
+                .setStyle(ButtonStyle.Primary)
+                .setDisabled(false),
+            new ButtonBuilder()
+                .setCustomId('lb_quick_draw')
+                .setLabel('Speed')
+                .setStyle(ButtonStyle.Primary)
+                .setDisabled(false)
+        )
+
+        interaction.reply({ embeds: [embed], components: [bar] });
     }
 }
