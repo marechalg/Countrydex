@@ -52,7 +52,7 @@ const rest = new REST({ version: '10' }).setToken(`${keys.DISCORD_TOKEN}`);
 (async () => {
     try {
         adlog('info', 'discord', `Resgistering ${client.commands.size} commands...`);
-        let data = await rest.put(Routes.applicationGuildCommands(`${ids.DISCORD_CLIENT_ID}`, `${ids.DISCORD_SERVER_ID}`), {
+        let data = await rest.put(Routes.applicationCommands(`${ids.DISCORD_CLIENT_ID}`), {
             body: client.commands.map(cmd => cmd.data.toJSON())
         })
         adlog('log', 'discord', `Registered ${data.length} commands (${data.map(cmd => cmd.name).join(', ')})`);
