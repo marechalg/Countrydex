@@ -6,6 +6,7 @@ const { adlog, m, h, spawnTime, backupTime } = require('../functions');
 
 const countries = require('../../data/countries.json');
 const { emojis } = require('../../data/utils.json');
+const { SPAWN } = require('../../data/config.json');
 
 module.exports = {
     name: 'clientReady',
@@ -21,7 +22,7 @@ module.exports = {
         }, m(1));
 
         function spawnCountry() {
-            client.channels.cache.filter(chnl => chnl.name.toLowerCase().includes('spawning')).forEach(async spawn => {
+            client.channels.cache.filter(chnl => chnl.name.toLowerCase().includes(SPAWN)).forEach(async spawn => {
                 let data = JSON.parse(fs.readFileSync('data/spawns.json'));
                 if (!data[spawn.id].solved) {
                     spawn.messages.fetch(data[spawn.id].messageId)
