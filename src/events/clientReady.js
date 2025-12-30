@@ -5,7 +5,7 @@ const vibrant = require('node-vibrant');
 const { adlog, m, h, spawnTime, backupTime } = require('../functions');
 
 const countries = require('../../data/countries.json');
-const { emojis } = require('../../data/utils.json');
+const { emojis, colors } = require('../../data/utils.json');
 const { SPAWN } = require('../../data/config.json');
 
 module.exports = {
@@ -24,16 +24,21 @@ module.exports = {
         function spawnCountry() {
             client.channels.cache.filter(chnl => chnl.name.toLowerCase().includes(SPAWN)).forEach(async spawn => {
                 let data = JSON.parse(fs.readFileSync('data/spawns.json'));
-                if (!data[spawn.id].solved) {
+                if (data[spawn.id] && !data[spawn.id].solved) {
                     spawn.messages.fetch(data[spawn.id].messageId)
                         .then(msg => msg.delete())
-                        .catch(() => {});
-                }
+                        .catch(err => { adlog('error', 'json', err) });
+                    }
 
                 const country = countries[Math.floor(Math.random() * countries.length)];
 
-                new vibrant(`https://flagpedia.net/data/flags/w1160/${country.code}.jpg`).getPalette().then(p => {
-                    const color = p.Vibrant.hex;
+                let color;
+                new vibrant(`https://flagpedia.net/data/flags/w1160/${country.code}.jpg`).getPalette().then (pal => {
+                    color = pal.Vibrant?.hex || colors.DEFAULT;
+                }).catch (err => {
+                    adlog('error', 'node-vibrant', err);
+                    color = colors.DEFAULT;
+                }).finally(() => {
                     const embed = new EmbedBuilder()
                         .setImage(`https://flagpedia.net/data/flags/w1160/${country.code}.webp`)
                         .setColor(color);
@@ -48,7 +53,7 @@ module.exports = {
                         data[spawn.id] = { name: country.name, code: country.code, color: color, messageId: msg.id, solved: false };
                         fs.writeFileSync('data/spawns.json', JSON.stringify(data, null, 4));
                     })
-                });
+                })
             });
         }
 
@@ -61,7 +66,7 @@ module.exports = {
         setTimeout(() => {
             spawnCountry();
             setInterval(spawnCountry, h(1));
-        }, spawnTime());
+        }, 0);
 
         setTimeout(() => {
             backup();
