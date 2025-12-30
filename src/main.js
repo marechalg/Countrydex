@@ -48,15 +48,15 @@ for (const file of commandFiles) {
 adlog('log', 'fs', `Loaded ${client.commands.size} commands (${client.commands.map(cmd => cmd.data.name).join(', ')})`);
 
 //COMMANDS RESGISTERING
+adlog('info', 'discord', `Registering ${client.commands.size} commands...`);
 const rest = new REST({ version: '10' }).setToken(`${keys.DISCORD_TOKEN}`);
 (async () => {
     try {
-        adlog('info', 'discord', `Resgistering ${client.commands.size} commands...`);
         let data = await rest.put(Routes.applicationCommands(`${ids.DISCORD_CLIENT_ID}`), {
             body: client.commands.map(cmd => cmd.data.toJSON())
         })
         adlog('log', 'discord', `Registered ${data.length} commands (${data.map(cmd => cmd.name).join(', ')})`);
     } catch (err) {
-        adlog('errror', 'discord', err);
+        adlog('error', 'discord', err);
     }
 })();
