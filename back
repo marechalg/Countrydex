@@ -13,62 +13,61 @@ module.exports = {
     once: true,
     execute(args, client) {
         adlog('log', 'discord', `Connected to ${client.user.tag}`);
-        
+
         const presenceInterval = setInterval(() => {
             const remainingTime = Math.round(spawnTime() / m(1));
             client.user.setPresence({
                 activities: [{ name: `${remainingTime} min`, type: ActivityType.Custom, state: `Spawning in ${remainingTime} min` }]
             });
         }, m(1));
-        
+
         function spawnCountry() {
-            client.channels.cache.filter(chnl => chnl.name.toLowerCase().includes(SPAWN)).forEach(spawn => {
+            client.channels.cache.filter(chnl => chnl.name.toLowerCase().includes(SPAWN)).forEach(async spawn => {
                 let data = JSON.parse(fs.readFileSync('data/spawns.json'));
                 if (data[spawn.id] && !data[spawn.id].solved) {
                     spawn.messages.fetch(data[spawn.id].messageId)
-                    .then(msg => msg.delete())
-                    .catch(err => { adlog('error', 'json', err) });
-                }
-                
+                        .then(msg => msg.delete())
+                        .catch(err => { adlog('error', 'json', err) });
+                    }
+
                 const country = countries[Math.floor(Math.random() * countries.length)];
+
                 let color;
-                
-                new vibrant(`https://flagpedia.net/data/flags/w1160/${country.code}.jpg`).getPalette().then(pal => {
+                new vibrant(`https://flagpedia.net/data/flags/w1160/${country.code}.jpg`).getPalette().then (pal => {
                     color = pal.Vibrant?.hex || colors.DEFAULT;
-                }).catch(err => {
+                }).catch (err => {
                     adlog('error', 'node-vibrant', err);
                     color = colors.DEFAULT;
                 }).finally(() => {
                     const embed = new EmbedBuilder()
-                    .setImage(`https://flagpedia.net/data/flags/w1160/${country.code}.webp`)
-                    .setColor(color);
+                        .setImage(`https://flagpedia.net/data/flags/w1160/${country.code}.webp`)
+                        .setColor(color);
                     const button = new ButtonBuilder()
-                    .setCustomId('guess_button')
-                    .setLabel('Guess')
-                    .setStyle(ButtonStyle.Secondary)
-                    .setEmoji(`${emojis.MAG}`);
+                        .setCustomId('guess_button')
+                        .setLabel('Guess')
+                        .setStyle(ButtonStyle.Secondary)
+                        .setEmoji(`${emojis.MAG}`);
                     const row = new ActionRowBuilder().addComponents(button);
-                    
+
                     spawn.send({ embeds: [embed], components: [row] }).then(msg => {
-                        const currentData = JSON.parse(fs.readFileSync('data/spawns.json'));
-                        currentData[spawn.id] = { name: country.name, code: country.code, color: color, messageId: msg.id, solved: false };
-                        fs.writeFileSync('data/spawns.json', JSON.stringify(currentData, null, 4));
+                        data[spawn.id] = { name: country.name, code: country.code, color: color, messageId: msg.id, solved: false };
+                        fs.writeFileSync('data/spawns.json', JSON.stringify(data, null, 4));
                     })
                 })
             });
         }
-        
+
         function backup() {
             const data = JSON.parse(fs.readFileSync('data/countrydexs.json'));
             fs.writeFileSync('data/backup/countrydexs.json', JSON.stringify(data, null, 4));
             adlog('log', 'fs', 'Nouvelle backup');
         }
-        
+
         setTimeout(() => {
             spawnCountry();
             setInterval(spawnCountry, h(1));
         }, 0);
-        
+
         setTimeout(() => {
             backup();
             setInterval(backup, h(24));
