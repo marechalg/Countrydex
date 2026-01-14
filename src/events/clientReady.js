@@ -22,7 +22,7 @@ module.exports = {
         }, m(1));
 
         async function spawnCountry() {
-            let data = JSON.parse(fs.readFile('data/spawns.json'));
+            let data = JSON.parse(await fs.promises.readFile('data/spawns.json', 'utf-8'));
     
             const spawnChannels = client.channels.cache.filter(chnl => chnl.name.toLowerCase().includes(SPAWN));
 
@@ -64,7 +64,7 @@ module.exports = {
                 }
             }
             
-            fs.writeFile('data/spawns.json', JSON.stringify(data, null, 4));
+            await fs.promises.writeFile('data/spawns.json', JSON.stringify(data, null, 4));
         }
 
         function backup() {
