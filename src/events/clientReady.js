@@ -22,7 +22,7 @@ module.exports = {
         }, m(1));
 
         async function spawnCountry() {
-            let data = JSON.parse(fs.readFileSync('data/spawns.json'));
+            let data = JSON.parse(fs.readFile('data/spawns.json'));
     
             const spawnChannels = client.channels.cache.filter(chnl => chnl.name.toLowerCase().includes(SPAWN));
 
@@ -62,13 +62,9 @@ module.exports = {
                     messageId: msg.id, 
                     solved: false 
                 }
-
-                adlog('debug', 'spawn', `Added ${spawn.id}: ${country.name}`);
             }
             
-            adlog('debug', 'spawn', `Data before write: ${JSON.stringify(data)}`);
-            fs.writeFileSync('data/spawns.json', JSON.stringify(data, null, 4));
-            adlog('debug', 'spawn', 'File written');
+            fs.writeFile('data/spawns.json', JSON.stringify(data, null, 4));
         }
 
         function backup() {
