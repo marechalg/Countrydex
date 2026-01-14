@@ -62,9 +62,13 @@ module.exports = {
                     messageId: msg.id, 
                     solved: false 
                 }
+
+                adlog('debug', 'spawn', `Added ${spawn.id}: ${country.name}`);
             }
-    
+            
+            adlog('debug', 'spawn', `Data before write: ${JSON.stringify(data)}`);
             fs.writeFileSync('data/spawns.json', JSON.stringify(data, null, 4));
+            adlog('debug', 'spawn', 'File written');
         }
 
         function backup() {
@@ -76,7 +80,7 @@ module.exports = {
         setTimeout(() => {
             spawnCountry();
             setInterval(spawnCountry, h(1));
-        }, spawnTime());
+        }, 0);
 
         setTimeout(() => {
             backup();
