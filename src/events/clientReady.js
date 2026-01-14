@@ -25,7 +25,7 @@ module.exports = {
             client.channels.cache.filter(chnl => chnl.name.toLowerCase().includes(SPAWN)).forEach(async spawn => {
                 let data = JSON.parse(fs.readFileSync('data/spawns.json'));
                 if (data[spawn.id] && !data[spawn.id].solved) {
-                    spawn.messages.fetch(data[spawn.id].messageId)
+                    awaitspawn.messages.fetch(data[spawn.id].messageId)
                         .then(msg => msg.delete())
                         .catch(err => { adlog('error', 'json', err) });
                     }
@@ -38,7 +38,7 @@ module.exports = {
                 }).catch (err => {
                     adlog('error', 'node-vibrant', err);
                     color = colors.DEFAULT;
-                }).finally(() => {
+                }).finally(async () => {
                     const embed = new EmbedBuilder()
                         .setImage(`https://flagpedia.net/data/flags/w1160/${country.code}.webp`)
                         .setColor(color);
@@ -49,7 +49,7 @@ module.exports = {
                         .setEmoji(`${emojis.MAG}`);
                     const row = new ActionRowBuilder().addComponents(button);
 
-                    spawn.send({ embeds: [embed], components: [row] }).then(msg => {
+                    await spawn.send({ embeds: [embed], components: [row] }).then(msg => {
                         data[spawn.id] = { name: country.name, code: country.code, color: color, messageId: msg.id, solved: false };
                         fs.writeFileSync('data/spawns.json', JSON.stringify(data, null, 4));
                     })
