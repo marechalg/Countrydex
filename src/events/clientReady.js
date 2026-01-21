@@ -11,6 +11,7 @@ const { SPAWN } = require('../../data/config.json');
 module.exports = {
     name: 'clientReady',
     once: true,
+
     execute(args, client) {
         adlog('log', 'discord', `Connected to ${client.user.tag}`);
         
@@ -26,8 +27,8 @@ module.exports = {
                 let data = JSON.parse(fs.readFileSync('data/spawns.json'));
                 if (data[spawn.id] && !data[spawn.id].solved) {
                     spawn.messages.fetch(data[spawn.id].messageId)
-                    .then(msg => msg.delete())
-                    .catch(err => { adlog('error', 'json', err) });
+                        .then(msg => msg.delete())
+                        .catch(err => { adlog('error', 'json', err) });
                 }
                 
                 const country = countries[Math.floor(Math.random() * countries.length)];
@@ -40,19 +41,19 @@ module.exports = {
                     color = colors.DEFAULT;
                 }).finally(() => {
                     const embed = new EmbedBuilder()
-                    .setImage(`https://flagpedia.net/data/flags/w1160/${country.code}.webp`)
-                    .setColor(color);
+                        .setImage(`https://flagpedia.net/data/flags/w1160/${country.code}.webp`)
+                        .setColor(color);
                     const button = new ButtonBuilder()
-                    .setCustomId('guess_button')
-                    .setLabel('Guess')
-                    .setStyle(ButtonStyle.Secondary)
-                    .setEmoji(`${emojis.MAG}`);
+                        .setCustomId('guess_button')
+                        .setLabel('Guess')
+                        .setStyle(ButtonStyle.Secondary)
+                        .setEmoji(`${emojis.MAG}`);
                     const row = new ActionRowBuilder().addComponents(button);
                     
-                    spawn.send({ embeds: [embed], components: [row] }).then(msg => {
+                    spawn.send({ embeds: [embed], components: [row] }).then(async msg => {
                         const currentData = JSON.parse(fs.readFileSync('data/spawns.json'));
                         currentData[spawn.id] = { name: country.name, code: country.code, color: color, messageId: msg.id, solved: false };
-                        fs.writeFileSync('data/spawns.json', JSON.stringify(currentData, null, 4));
+                        await fs.writeFileSync('data/spawns.json', JSON.stringify(currentData, null, 4));
                     })
                 })
             });
