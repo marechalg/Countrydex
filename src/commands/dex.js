@@ -3,20 +3,22 @@ const {
 } = require('discord.js');
 const fs = require('node:fs');
 
+const { pdo } = require('../functions/import');
+
 const { images } = require('../../data/utils.json');
+
+const countries = require('../../data/countries.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('dex')
         .setDescription('Display the content of your Countrydex'),
     async execute(interaction) {
-        const countries = JSON.parse(fs.readFileSync('data/countries.json', 'utf-8'));
-        const dexs = JSON.parse(fs.readFileSync('data/countrydexs.json', 'utf-8'));
-        const dex = dexs[interaction.user.id];
+        const dex = await pdo.query(fs.readFileSync('data/queries/dex_countries.sql', 'utf-8'), [interaction.user.id]);
 
         let page = 0;
 
-        if (!dex) return interaction.reply({ embeds: [new EmbedBuilder()
+        if (dex.rowCount == 0) return interaction.reply({ embeds: [new EmbedBuilder()
             .setAuthor({
                 name: `${interaction.user.tag}'s Countrydex`,
                 iconURL: images.DEX,
@@ -28,7 +30,7 @@ module.exports = {
             .setDescription('You didn\'t catch any flag')
         ] })
 
-        let uniq = [...new Map(dex.map(item => [item.code, item])).values()].sort((a, b) => a.name.localeCompare(b.name));
+        let uniq = [...new Map(dex.rows.map(item => [item.code, item])).values()].sort((a, b) => a.name.localeCompare(b.name));
         const embed = new EmbedBuilder()
             .setAuthor({
                 name: `${interaction.user.tag}'s Countrydex`,
