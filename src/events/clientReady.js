@@ -95,7 +95,7 @@ module.exports = {
                 });
             });
         }
-        
+    
         function backup() {
             const data = JSON.parse(fs.readFileSync('data/countrydexs.json', 'utf8'));
             fs.writeFileSync('data/backup/countrydexs.json', JSON.stringify(data, null, 4));
