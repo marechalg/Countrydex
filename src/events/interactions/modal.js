@@ -2,7 +2,7 @@ const fs = require('node:fs');
 const moment = require('moment');
 const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, MessageFlags } = require('discord.js');
 
-const { neutralize } = require('../../functions');
+const { neutralize } = require('../../functions/import');
 const { emojis, images } = require('../../../data/utils.json');
 
 module.exports = {

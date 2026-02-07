@@ -2,7 +2,7 @@ const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle, ActivityType
 const fs = require('node:fs');
 const vibrant = require('node-vibrant');
 
-const { adlog, m, h, spawnTime, backupTime } = require('../functions');
+const { adlog, m, h, spawnTime, backupTime } = require('../functions/import');
 
 const countries = require('../../data/countries.json');
 const { emojis, colors } = require('../../data/utils.json');

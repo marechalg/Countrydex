@@ -1,6 +1,6 @@
 const { PermissionFlagsBits, ChannelType } = require('discord.js');
 
-const { adlog } = require('../functions');
+const { adlog } = require('../functions/import');
 
 const { SPAWN } = require('../../data/config.json');
 

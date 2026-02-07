@@ -3,7 +3,7 @@ const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10');
 const fs = require('node:fs');
 
-const { adlog, m } = require('./functions');
+const { adlog, m } = require('./functions/import');
 
 const { keys, ids } = require('../data/config.json');
 

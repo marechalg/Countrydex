@@ -1,6 +1,6 @@
 const { EmbedBuilder } = require('discord.js');
 
-const { adlog } = require('../../../functions');
+const { adlog } = require('../../../functions/import');
 const { images } = require('../../../../data/utils.json');
 
 module.exports = {

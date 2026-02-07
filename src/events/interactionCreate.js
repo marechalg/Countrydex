@@ -1,6 +1,6 @@
 const { InteractionType, ComponentType, ApplicationCommandType } = require('discord.js');
 
-const { adlog } = require('../functions');
+const { adlog } = require('../functions/import');
 
 module.exports = {
     name: 'interactionCreate',
