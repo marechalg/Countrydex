@@ -14,7 +14,7 @@ module.exports = {
                         await chatInputHandler.execute(interaction, client);
                         break;
                     default:
-                        adlog('error', 'discord', `Unhandled interaction command type : ${interaction.commandType}`);
+                        adlog('warn', 'discord', `Unhandled interaction command type : ${interaction.commandType}`);
                         break;
                 }
                 break;
@@ -30,7 +30,7 @@ module.exports = {
                         await stringSelectHandler.execute(interaction, client);
                         break;
                     default:
-                        adlog('error', 'discord', `Unhandled interaction component type : ${interaction.componentType}`);
+                        adlog('warn', 'discord', `Unhandled interaction component type : ${interaction.componentType}`);
                         break;
                 }
                 break;
@@ -41,7 +41,7 @@ module.exports = {
                 break;
 
             default:
-                adlog('error', 'discord', `Unhandled interaction type : ${interaction.type}`);
+                adlog('warn', 'discord', `Unhandled interaction type : ${interaction.type}`);
                 break;
         }
     }
