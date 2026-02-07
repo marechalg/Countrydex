@@ -1,7 +1,6 @@
 const { name, version } = require('../../package.json');
 const { keys } = require('../../data/config.json');
-const { delay, pdo } = require('../functions/import');
-const adlog = require('../functions/adlog');
+const { delay, pdo ,adlog } = require('../functions/import');
 const axios = require('axios');
 const countries = require('../../data/countries.json');
 
