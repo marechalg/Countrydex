@@ -7,13 +7,12 @@ const { pdo } = require('../functions/import');
 
 const { images } = require('../../data/utils.json');
 
-const countries = require('../../data/countries.json');
-
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('dex')
         .setDescription('Display the content of your Countrydex'),
     async execute(interaction) {
+        const countries = await pdo.query(fs.readFileSync('data/queries/countries.sql', 'utf-8'));
         const dex = await pdo.query(fs.readFileSync('data/queries/dex_countries.sql', 'utf-8'), [interaction.user.id]);
 
         let page = 0;
@@ -25,12 +24,12 @@ module.exports = {
             })
             .addFields({
                 name: 'Collection',
-                value: `**0**/${countries.length} (0%)`
+                value: `**0**/${countries.rowCount} (0%)`
             })
             .setDescription('You didn\'t catch any flag')
         ] })
 
-        let uniq = [...new Map(dex.rows.map(item => [item.code, item])).values()].sort((a, b) => a.name.localeCompare(b.name));
+        let uniq = await pdo.query(fs.readFileSync('data/queries/dex_countries_uniq_sorted.sql', 'utf-8'), [interaction.user.id]);
         const embed = new EmbedBuilder()
             .setAuthor({
                 name: `${interaction.user.tag}'s Countrydex`,
@@ -38,17 +37,17 @@ module.exports = {
             })
             .addFields({
                 name: 'Collection',
-                value: `**${uniq.length}**/${countries.length} (${((uniq.length / countries.length ) * 100).toFixed(0)}%)`
+                value: `**${uniq.rowCount}**/${countries.rowCount} (${((uniq.rowCount / countries.rowCount ) * 100).toFixed(0)}%)`
             })
         ;
 
         let components = []
 
-        const pages = Math.ceil(uniq.length / 25);
+        const pages = Math.ceil(uniq.rowCount / 25);
 
         let rows = []
 
-        for (const f of uniq.slice(0, 25)) {
+        for (const f of uniq.rows.slice(0, 25)) {
             rows.push(new StringSelectMenuOptionBuilder()
                 .setLabel(`[${f.code}] ${f.name}`)
                 .setValue(`${f.code}`)
@@ -64,7 +63,6 @@ module.exports = {
         components.push(selectionMenu);
         
         if (pages > 1) {
-            uniq = uniq.slice(0, 25);
             embed.setFooter({ text: `Page 1/${pages}` });
 
             const navigationRow = new ActionRowBuilder().addComponents(
