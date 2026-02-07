@@ -1,5 +1,5 @@
 create table _spawn (
-    message int primary key,
+    message bigint primary key,
     solved boolean,
     code varchar(6),
 

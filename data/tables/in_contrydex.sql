@@ -1,7 +1,7 @@
 create table _in_countrydex (
-    owner int,
+    owner bigint,
     code varchar(6),
-    timestamp timestamp,
+    timestamp bigint,
 
     constraint fk_countrydex_country foreign key
         (code) references _country(code),
