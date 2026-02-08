@@ -7,5 +7,5 @@ create table _spawn (
     constraint fk_spawn_country foreign key
         (code) references _country(code),
     
-    primary key(channel, message)
+    primary key(channel)
 );
