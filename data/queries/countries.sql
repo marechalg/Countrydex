@@ -1,1 +1,1 @@
-select * from _country;
+select * from countrydex._country;

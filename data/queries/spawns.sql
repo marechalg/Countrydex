@@ -1,1 +1,1 @@
-select * from _spawn;
+select * from countrydex._spawn;

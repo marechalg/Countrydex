@@ -1,1 +1,1 @@
-select * from leaderboard_quick;
+select * from countrydex.leaderboard_quick;
