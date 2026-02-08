@@ -7,7 +7,7 @@ const { SPAWN } = require('../../data/config.json');
 module.exports = {
     name: 'guildCreate',
     once: false,
-    async execute(guild, client) {
+    async execute(guild) {
         if (!guild.channels.cache.find(chnl => chnl.name.includes(SPAWN))) {
             const clientAsMember = await guild.members.fetchMe();
             if (clientAsMember.permissions.has(PermissionFlagsBits.ManageChannels)) {
