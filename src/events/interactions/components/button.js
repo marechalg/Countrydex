@@ -2,22 +2,23 @@ const fs = require('node:fs');
 const { 
     EmbedBuilder, ModalBuilder, ActionRowBuilder, ButtonBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ButtonStyle, TextInputBuilder, TextInputStyle
 } = require('discord.js');
-const moment = require('moment');
+
+const { pdo, getCountries } = require('../../../functions/import');
 
 const { images } = require('../../../../data/utils.json');
-const countries = require ('../../../../data/countries.json');
 
 module.exports = {
     async execute(interaction, client) {
-        const dexs = JSON.parse(fs.readFileSync('data/countrydexs.json', 'utf-8'));
-        const dex = dexs[interaction.user.id];
+        const countries = await getCountries();
+        const dex = await pdo.query(fs.readFileSync('data/queries/dex_countries.sql', 'utf-8'), [interaction.user.id]);
+        let uniq = await pdo.query(fs.readFileSync('data/queries/dex_countries_uniq_sorted.sql', 'utf-8'), [interaction.user.id]);
 
         // GUESS
         if (interaction.customId == 'guess_button') {
             const modal = new ModalBuilder()
                 .setCustomId('guess_modal')
                 .setTitle('Guess the Country')
-                .addComponents([new ActionRowBuilder().addComponents(new TextInputBuilder()
+                .addComponents(new ActionRowBuilder().addComponents(new TextInputBuilder()
                     .setCustomId('guess_input')
                     .setLabel('Guess')
                     .setStyle(TextInputStyle.Short)
@@ -25,7 +26,7 @@ module.exports = {
                     .setMaxLength(32)
                     .setPlaceholder('Name or code (ex: "France" or "fr")')
                     .setRequired(true)
-                )])
+                ))
             await interaction.showModal(modal)
         }
 
@@ -34,8 +35,7 @@ module.exports = {
             let data = interaction.customId.split('_');
             let page = parseInt(data[3]) - 1;
 
-            let uniq = [...new Map(dex.map(item => [item.code, item])).values()].sort((a, b) => a.name.localeCompare(b.name));
-            const pages = Math.ceil(uniq.length / 25);
+            const pages = Math.ceil(uniq.rowCount / 25);
             uniq = uniq.slice(page * 25, page * 25 + 25);
 
             const navigationRow = new ActionRowBuilder().addComponents(
@@ -76,7 +76,6 @@ module.exports = {
             let data = interaction.customId.split('_');
             let page = parseInt(data[3]) + 1;
 
-            let uniq = [...new Map(dex.map(item => [item.code, item])).values()].sort((a, b) => a.name.localeCompare(b.name));
             const pages = Math.ceil(uniq.length / 25);
             uniq = uniq.slice(page * 25, page * 25 + 25);
 
@@ -115,15 +114,7 @@ module.exports = {
 
         // COMPLETIONNIST LEADERBOARD 
         if (interaction.customId == 'lb_completion') {
-            let leaderboard = [];
-            let ct = 0;
-            for (const [userId, flags] of Object.entries(dexs)) {
-                if (ct++ >= 10) break;
-                let uniq = [...new Map(flags.map(item => [item.code, item])).values()].sort((a, b) => a.name.localeCompare(b.name));
-                leaderboard.push({'id': userId, 'amount': uniq.length, 'pourcentage': uniq.length * 100 / countries.length});
-            }
-
-            leaderboard.sort((a, b) => b.pourcentage - a.pourcentage);
+            const leaderboard = await pdo.query(fs.readFileSync('data/queries/leaderboard_unique.sql', 'utf-8'));
 
             let embed = new EmbedBuilder()
                 .setColor('Blurple')
@@ -136,7 +127,7 @@ module.exports = {
                 });
         
             let i = 1;
-            for (const userInfos of leaderboard) {
+            for (const userInfos of leaderboard.rows) {
                 let place;
                 switch (i) {
                     case 1:
@@ -153,9 +144,10 @@ module.exports = {
                         break;
                 }
 
+                const user = await client.users.fetch(userInfos.owner);
                 embed.addFields({
-                    name: `${place} ${client.users.cache.find(user => user.id == userInfos.id).username}`,
-                    value: `**${Math.floor(userInfos.pourcentage)}**% *(${userInfos.amount}/${countries.length})*`
+                    name: `${place} ${user.username}`,
+                    value: `**${Math.floor(userInfos.count * 100 / countries.rowCount)}**% *(${userInfos.count}/${countries.rowCount})*`
                 })
 
                 i++;
@@ -182,14 +174,7 @@ module.exports = {
 
         // COLLECTOR LEADERBOAD
         if (interaction.customId == 'lb_collection') {
-            let leaderboard = [];
-            let ct = 0;
-            for (const [userId, flags] of Object.entries(dexs)) {
-                if (ct++ >= 10) break;
-                leaderboard.push({'id': userId, 'amount': flags.length});
-            }
-
-            leaderboard.sort((a, b) => b.amount - a.amount);
+            const leaderboard = await pdo.query(fs.readFileSync('data/queries/leaderboard_all.sql', 'utf-8'));
 
             let embed = new EmbedBuilder()
                 .setColor('Blurple')
@@ -202,7 +187,7 @@ module.exports = {
                 });
         
             let i = 1;
-            for (const userInfos of leaderboard) {
+            for (const userInfos of leaderboard.rows) {
                 let place;
                 switch (i) {
                     case 1:
@@ -219,9 +204,10 @@ module.exports = {
                         break;
                 }
 
+                const user = await client.users.fetch(userInfos.owner);
                 embed.addFields({
-                    name: `${place} ${client.users.cache.find(user => user.id == userInfos.id).username}`,
-                    value: `**${userInfos.amount}** flags caught`
+                    name: `${place} ${user.username}`,
+                    value: `**${userInfos.count}** flags caught`
                 })
 
                 i++;
@@ -248,20 +234,7 @@ module.exports = {
 
         // SPEED LEADERBOAD
         if (interaction.customId == 'lb_quick_draw') {
-            let leaderboard = [];
-            let ct = 0;
-            for (const [userId, flags] of Object.entries(dexs)) {
-                if (ct++ >= 10) break;
-                let avg = 0;
-                for (const flag of flags) {
-                    const min = moment(flag.date).minutes();
-                    avg += min < 30 ? min : min - 30;
-                }
-                avg /= flags.length;
-                leaderboard.push({'id': userId, 'amount': flags.length, 'time': avg});
-            }
-
-            leaderboard.sort((a, b) => a.time - b.time);
+            const leaderboard = await pdo.query(fs.readFileSync('data/queries/leaderboard_quick.sql', 'utf-8'));
 
             let embed = new EmbedBuilder()
                 .setColor('Blurple')
@@ -274,7 +247,7 @@ module.exports = {
                 });
         
             let i = 1;
-            for (const userInfos of leaderboard) {
+            for (const userInfos of leaderboard.rows) {
                 let place;
                 switch (i) {
                     case 1:
@@ -291,9 +264,10 @@ module.exports = {
                         break;
                 }
 
+                const user = await client.users.fetch(userInfos.owner);
                 embed.addFields({
-                    name: `${place} ${client.users.cache.find(user => user.id == userInfos.id).username}`,
-                    value: `**${Math.floor(userInfos.time)}** min`
+                    name: `${place} ${user.username}`,
+                    value: `**${Math.floor(userInfos.avg)}** min`
                 })
 
                 i++;
