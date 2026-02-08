@@ -3,7 +3,7 @@ const {
 } = require('discord.js');
 const fs = require('node:fs');
 
-const { pdo } = require('../functions/import');
+const { pdo, getCountries } = require('../functions/import');
 
 const { images } = require('../../data/utils.json');
 
@@ -12,7 +12,7 @@ module.exports = {
         .setName('dex')
         .setDescription('Display the content of your Countrydex'),
     async execute(interaction) {
-        const countries = await pdo.query(fs.readFileSync('data/queries/countries.sql', 'utf-8'));
+        const countries = getCountries();
         const dex = await pdo.query(fs.readFileSync('data/queries/dex_countries.sql', 'utf-8'), [interaction.user.id]);
 
         let page = 0;
