@@ -12,7 +12,7 @@ module.exports = {
         .setName('leaderboard')
         .setDescription('Leaderboard of flags collection'),
     async execute(interaction, client) {
-        const countries = getCountries();
+        const countries = await getCountries();
 
         const leaderboard = await pdo.query(fs.readFileSync('data/queries/leaderboard_unique.sql', 'utf-8'));
 
@@ -45,7 +45,6 @@ module.exports = {
                     break;
             }
 
-            console.log(userInfos);
             const user = await client.users.fetch(userInfos.owner);
             embed.addFields({
                 name: `${place} ${user.username}`,

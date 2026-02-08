@@ -12,7 +12,7 @@ module.exports = {
         .setName('dex')
         .setDescription('Display the content of your Countrydex'),
     async execute(interaction) {
-        const countries = getCountries();
+        const countries = await getCountries();
         const dex = await pdo.query(fs.readFileSync('data/queries/dex_countries.sql', 'utf-8'), [interaction.user.id]);
 
         let page = 0;
