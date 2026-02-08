@@ -2,7 +2,9 @@ const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle, ActivityType
 const fs = require('node:fs');
 const vibrant = require('node-vibrant');
 
-const { adlog, m, h, spawnTime, backupTime, getCountries, getSpawn, newSpawn } = require('../functions/import');
+const {
+    adlog, m, h, spawnTime, backupTime, getCountries, getSpawn, newSpawn, backup
+} = require('../functions/import');
 
 const { emojis, colors } = require('../../data/utils.json');
 const { SPAWN } = require('../../data/config.json');
@@ -63,12 +65,6 @@ module.exports = {
                     })
                 ;
             })
-        }
-    
-        function backup() {
-            const data = JSON.parse(fs.readFileSync('data/countrydexs.json', 'utf8'));
-            fs.writeFileSync('data/backup/countrydexs.json', JSON.stringify(data, null, 4));
-            adlog('log', 'fs', 'Nouvelle backup');
         }
     
         setTimeout(() => {
