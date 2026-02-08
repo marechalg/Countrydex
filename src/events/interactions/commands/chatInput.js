@@ -22,7 +22,7 @@ module.exports = {
         try {
             await command.execute(interaction, client);
         } catch (err) {
-            adlog('error', 'discord', `${err}`);
+            adlog('error', 'discord', `${err.stack}`);
             interaction.reply({ embeds: [new EmbedBuilder()
                 .setColor('Red')
                 .setAuthor({
