@@ -5,6 +5,7 @@ const { h, m, s, spawnTime, backupTime } = require('./time');
 const neutralize = require('./neutralize');
 const { getCountries, getSpawns, getSpawn } = require('./getters');
 const { newSpawn } = require('./setters');
+const { backup } = require('./backup');
 
 module.exports = {
     delay,
@@ -13,5 +14,6 @@ module.exports = {
     h, m, s, spawnTime, backupTime,
     neutralize,
     getCountries, getSpawns, getSpawn,
-    newSpawn
+    newSpawn,
+    backup
 }
