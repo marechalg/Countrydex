@@ -16,6 +16,21 @@ async function getSpawn(channelId) {
     return spawn.rows[0] || null;
 }
 
+async function getCaught(userId, code) {
+    const caught = await pdo.query(fs.readFileSync('data/queries/caught.sql', 'utf-8'), [userId, code]);
+    return caught;
+}
+
+async function getFirstCaught(userId, code) {
+    const time = await pdo.query(fs.readFileSync('data/queries/first_caught.sql', 'utf-8'), [userId, code]);
+    return time.rows[0];
+}
+
+async function getLastCaught(userId, code) {
+    const time = await pdo.query(fs.readFileSync('data/queries/last_caught.sql', 'utf-8'), [userId, code]);
+    return time.rows[0];
+}
+
 module.exports = {
-    getCountries, getSpawns, getSpawn
+    getCountries, getSpawns, getSpawn, getCaught, getFirstCaught, getLastCaught
 }

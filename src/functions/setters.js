@@ -2,6 +2,7 @@ const fs = require('node:fs');
 const pdo = require('./pdo');
 const { getSpawn } = require('./getters');
 const adlog = require('./adlog');
+const moment = require('moment');
 
 async function newSpawn(channelId, messageId, code) {
     const exists = await getSpawn(channelId);
@@ -21,6 +22,22 @@ async function newSpawn(channelId, messageId, code) {
     }
 }
 
+async function solve(channelId) {
+    try {
+        await pdo.query(fs.readFileSync('data/queries/solve.sql', 'utf-8'), [channelId]);
+    } catch (err) {
+        adlog('error', 'pgsql', err.stack);
+    }
+}
+
+async function addToCountrydex(userId, code) {
+    try {
+        await pdo.query(fs.readFileSync('data/queries/add.sql', 'utf-8'), [userId, code, moment.now()]);
+    } catch (err) {
+        adlog('error', 'pgsql', err.stack);
+    }
+}
+
 module.exports = {
-    newSpawn
+    newSpawn, solve, addToCountrydex
 }

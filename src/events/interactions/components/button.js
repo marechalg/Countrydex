@@ -10,7 +10,6 @@ const { images } = require('../../../../data/utils.json');
 module.exports = {
     async execute(interaction, client) {
         const countries = await getCountries();
-        const dex = await pdo.query(fs.readFileSync('data/queries/dex_countries.sql', 'utf-8'), [interaction.user.id]);
         let uniq = await pdo.query(fs.readFileSync('data/queries/dex_countries_uniq_sorted.sql', 'utf-8'), [interaction.user.id]);
 
         // GUESS
@@ -36,7 +35,7 @@ module.exports = {
             let page = parseInt(data[3]) - 1;
 
             const pages = Math.ceil(uniq.rowCount / 25);
-            uniq = uniq.slice(page * 25, page * 25 + 25);
+            uniq = uniq.rows.slice(page * 25, page * 25 + 25);
 
             const navigationRow = new ActionRowBuilder().addComponents(
                 new ButtonBuilder()
@@ -76,8 +75,8 @@ module.exports = {
             let data = interaction.customId.split('_');
             let page = parseInt(data[3]) + 1;
 
-            const pages = Math.ceil(uniq.length / 25);
-            uniq = uniq.slice(page * 25, page * 25 + 25);
+            const pages = Math.ceil(uniq.rowCount / 25);
+            uniq = uniq.rows.slice(page * 25, page * 25 + 25);
 
             const navigationRow = new ActionRowBuilder().addComponents(
                 new ButtonBuilder()
