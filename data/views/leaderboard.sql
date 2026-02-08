@@ -14,7 +14,7 @@ create or replace view leaderboard_all as (
     order by count asc
 );
 
-create or replace view leadrboard_quick as (
+create or replace view leaderboard_quick as (
     select owner, avg(delta) from (
         select owner, getMinutes(timestamp) as delta
         from _in_countrydex
@@ -23,7 +23,7 @@ create or replace view leadrboard_quick as (
     order by avg desc
 );
 
-create or replace function getMinutes(ts bigint) returns int as $$
+create or replace function getMinutes(ts bigint) returns int as $func$
 declare
     minutes int;
 begin
@@ -35,4 +35,4 @@ begin
         return minutes + 30;
     end if;
 end;
-$$ language plpgsql;
+$func$ language plpgsql;

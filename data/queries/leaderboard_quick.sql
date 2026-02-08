@@ -1,1 +1,1 @@
-select * from leadrboard_quick;
+select * from leaderboard_quick;
