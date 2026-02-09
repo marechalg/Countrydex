@@ -60,7 +60,7 @@ module.exports = {
                             .setEmoji(`${emojis.MAG}`);
                         const row = new ActionRowBuilder().addComponents(button);
                         
-                        const clientAsMember = await guild.members.fetchMe();
+                        const clientAsMember = await spawnChnl.guild.members.fetchMe();
                         if (clientAsMember.permissions.has(PermissionFlagsBits.SendMessages)) {
                             return spawnChnl.send({ embeds: [embed], components: [row] }).then(msg => {
                                 newSpawn(spawnChnl.id, msg.id, country.code);
