@@ -27,7 +27,6 @@ module.exports = {
         
         function spawnCountry() {
             client.channels.cache.filter(chnl => chnl.name.toLowerCase().includes(SPAWN)).forEach(async spawnChnl => {
-                console.log(spawnChnl);
                 const spawnId = spawnChnl.id;
                 const spawn = await getSpawn(spawnId);
                 
@@ -42,6 +41,8 @@ module.exports = {
                 }
                 
                 const country = countries.rows[Math.floor(Math.random() * countries.rowCount)];
+
+                console.log(country);
                 
                 new vibrant(`https://flagpedia.net/data/flags/w1160/${country.code}.jpg`).getPalette()
                     .then(pal => pal.Vibrant?.hex || colors.DEFAULT)
