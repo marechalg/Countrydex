@@ -27,6 +27,7 @@ module.exports = {
         
         function spawnCountry() {
             client.channels.cache.filter(chnl => chnl.name.toLowerCase().includes(SPAWN)).forEach(async spawnChnl => {
+                console.log(spawnChnl);
                 const spawnId = spawnChnl.id;
                 const spawn = await getSpawn(spawnId);
                 
