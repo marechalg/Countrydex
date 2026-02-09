@@ -30,7 +30,7 @@ const header = `${name}/${version} (${keys.MAIL})`;
                 summary = 'Pas de déscription trouvée';
             }
             
-            await pdo.query('insert into _country (code, name, description) values ($1, $2, $3)', [
+            await pdo.query('insert into countrydex._country (code, name, description) values ($1, $2, $3)', [
                 country.code,
                 country.name,
                 summary
