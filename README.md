@@ -12,7 +12,7 @@ Countrydex spawns flags from around the world in your Discord server. Race to id
 - 🎮 **Interactive guessing** - Pop-up interface for country identification
 - 🏆 **Global leaderboard** - Compete on completion rate, collection size, and speed
 - 📊 **Personal stats** - Track your progress with `/dex`
-- 💾 **Reliable data** - Database backed up twice daily
+- 💾 **Reliable data** - Database backed up daily
 
 ## 🛠️ Commands
 
