@@ -1,5 +1,4 @@
 const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle, ActivityType } = require('discord.js');
-const fs = require('node:fs');
 const vibrant = require('node-vibrant');
 
 const {
@@ -42,7 +41,9 @@ module.exports = {
                 
                 const country = countries.rows[Math.floor(Math.random() * countries.rowCount)];
 
-                console.log(country);
+                console.log(Math.random());
+                console.log(countries);
+                console.log(countries.rowCount);
                 
                 new vibrant(`https://flagpedia.net/data/flags/w1160/${country.code}.jpg`).getPalette()
                     .then(pal => pal.Vibrant?.hex || colors.DEFAULT)
