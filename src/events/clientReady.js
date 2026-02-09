@@ -38,12 +38,10 @@ module.exports = {
                         })
                     } catch {}
                 }
+
+                console.log(countries);
                 
                 const country = countries.rows[Math.floor(Math.random() * countries.rowCount)];
-
-                console.log(Math.random());
-                console.log(countries);
-                console.log(countries.rowCount);
                 
                 new vibrant(`https://flagpedia.net/data/flags/w1160/${country.code}.jpg`).getPalette()
                     .then(pal => pal.Vibrant?.hex || colors.DEFAULT)
