@@ -28,13 +28,19 @@ Countrydex spawns flags from around the world in your Discord server. Race to id
 ## 🚀 Tech Stack
 
 - **Runtime**: Node.js
+
 - **Framework**: discord.js
+
 - **Database**: PostgreSQL
+
 - **Libraries**: 
   - node-vibrant (color extraction)
   - moment (time handling)
   - axios (HTTP requests)
   - deepl-node (translations)
+
+you can find more details into [packages file](package.json)
+
 - **Hosting**: Raspberry Pi 5 (8GB)
 
 ## 🎮 How to Play
