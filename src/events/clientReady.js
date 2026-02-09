@@ -1,4 +1,4 @@
-const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle, ActivityType } = require('discord.js');
+const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle, ActivityType, PermissionFlagsBits } = require('discord.js');
 const vibrant = require('node-vibrant');
 
 const {
@@ -49,7 +49,7 @@ module.exports = {
                         adlog('error', 'node-vibrant', err.stack);
                         return colors.DEFAULT;
                     })
-                    .then(color => {
+                    .then(async color => {
                         const embed = new EmbedBuilder()
                             .setImage(`https://flagpedia.net/data/flags/w1160/${country.code}.webp`)
                             .setColor(color);
@@ -59,10 +59,13 @@ module.exports = {
                             .setStyle(ButtonStyle.Secondary)
                             .setEmoji(`${emojis.MAG}`);
                         const row = new ActionRowBuilder().addComponents(button);
-                    
-                        return spawnChnl.send({ embeds: [embed], components: [row] }).then(msg => {
-                            newSpawn(spawnChnl.id, msg.id, country.code);
-                        })
+                        
+                        const clientAsMember = await guild.members.fetchMe();
+                        if (clientAsMember.permissions.has(PermissionFlagsBits.SendMessages)) {
+                            return spawnChnl.send({ embeds: [embed], components: [row] }).then(msg => {
+                                newSpawn(spawnChnl.id, msg.id, country.code);
+                            })
+                        }
                     })
                 ;
             })
