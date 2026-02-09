@@ -38,8 +38,6 @@ module.exports = {
                         })
                     } catch {}
                 }
-
-                console.log(countries.rowCount);
                 
                 const country = countries.rows[Math.floor(Math.random() * countries.rowCount)];
                 
