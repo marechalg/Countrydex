@@ -1,0 +1,1 @@
+delete from countrydex._in_countrydex where owner = $1;

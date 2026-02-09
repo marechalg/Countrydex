@@ -43,7 +43,7 @@ module.exports = {
                 })
             } else {
                 interaction.reply({ embeds: [new EmbedBuilder()
-                    .setColor('#ff0000')
+                    .setColor(colors.ERROR)
                     .setAuthor({
                         iconURL: `${images.ERROR}`,
                         name: 'Failed'
