@@ -1,7 +1,4 @@
 backups/backup_*
 config.*
-/data/countrydexs.json
-/data/spawns.json
 /node_modules
 /data/queries/tests.sql
-.logs
