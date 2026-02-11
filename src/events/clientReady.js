@@ -20,7 +20,7 @@ module.exports = {
         setInterval(() => {
             const remainingTime = Math.round(spawnTime() / m(1));
             client.user.setPresence({
-                activities: [{ name: `${remainingTime} min`, type: ActivityType.Custom, state: `Spawning in ${remainingTime} min` }]
+                activities: [{ name: `${remainingTime + 1} min`, type: ActivityType.Custom, state: `Spawning in ${remainingTime} min` }]
             });
         }, m(1));
         
