@@ -4,14 +4,14 @@ create or replace view leaderboard_unique as (
         from _in_countrydex
     ) as uniques
     group by owner
-    order by count asc
+    order by count desc
 );
 
 create or replace view leaderboard_all as (
     select owner, count(code)
     from _in_countrydex
     group by owner
-    order by count asc
+    order by count desc
 );
 
 create or replace view leaderboard_quick as (
@@ -20,7 +20,7 @@ create or replace view leaderboard_quick as (
         from _in_countrydex
     ) as calculated
     group by owner
-    order by avg desc
+    order by avg asc
 );
 
 create or replace function getMinutes(ts bigint) returns int as $func$
