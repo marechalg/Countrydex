@@ -3,6 +3,7 @@ const { promisify } = require('util');
 const execAsync = promisify(exec);
 const moment = require('moment');
 const { db } = require('../../data/config.json');
+const adlog = require('./adlog');
 
 async function backup() {
     try {
