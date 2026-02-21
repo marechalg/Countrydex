@@ -13,7 +13,7 @@ async function backup() {
         await execAsync(cmd);
         adlog('info', 'pgsql', 'New backup');
     } catch (err) {
-        adlog('error', 'pgsql', `Failed backing up DB : ${err.stack}`)
+        adlog('error', 'pgsql', `Failed backing up DB : ${err.stack}`);
     }
 }
 
