@@ -6,5 +6,6 @@ create or replace function delete_country() returns trigger as $func$
 begin
     delete from _in_countrydex where code = old.code;
     delete from _spawn where code = old.code;
+    return old;
 end;
 $func$ language plpgsql;
