@@ -2,10 +2,36 @@ const { Client, Collection } = require('discord.js');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10');
 const fs = require('node:fs');
+const moment = require('moment');
 
 const { adlog, m } = require('./functions/import');
 
 const { keys, ids } = require('../data/config.json');
+
+// CRASH LOGS
+function getCrashLogFile(errorType) {
+    const timestamp = moment().format('YYYY-MM-DD_HH:mm:ss');
+    return `${errorType}_${timestamp}.log`;
+}
+
+process.on('uncaughtException', error => {
+    adlog('error', 'node', `Uncaught Exception : ${error.message}`);
+    fs.appendFile(`logs/${getCrashLogFile(error.name)}`, error.stack, () => {
+        adlog('error', 'node', 'Crash log saved. Exiting...');
+        process.exit(1);  
+    })
+})
+
+process.on('unhandledRejection', (reason, promise) => {
+    const message = reason instanceof Error ? reason.message : String(reason);
+    const stack = reason instanceof Error ? reason.stack : `Rejection: ${message}`;
+    const name = reason instanceof Error ? reason.name : 'UnhandledRejection';
+
+    adlog('error', 'node', `Unhandled Rejection : ${message}`);
+    fs.appendFile(`logs/${getCrashLogFile(name)}`, stack, () => {
+        adlog('error', 'node', 'Rejection log saved.');
+    })
+})
 
 console.clear(), adlog('info', 'node', 'Executing...');
 
