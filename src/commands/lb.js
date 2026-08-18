@@ -28,7 +28,7 @@ module.exports = {
         ;
         
         let i = 1;
-        for (const userInfos of leaderboard.rows) {
+        for (const userInfos of leaderboard.rows.slice(0, 10)) {
             let place;
             switch (i) {
                 case 1:
