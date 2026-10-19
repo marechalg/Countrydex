@@ -1,7 +1,7 @@
 {
     "name": "countrydex",
     "description": "Pokémon-like with flags, hosted on Discord",
-    "version": "1.0.2",
+    "version": "1.1.0",
     "author": "Li Koubra",
     "license": "MIT",
     "main": "src/main.js",

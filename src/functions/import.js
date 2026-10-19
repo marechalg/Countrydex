@@ -3,8 +3,8 @@ const pdo = require('./pdo');
 const adlog = require('./adlog');
 const { h, m, s, spawnTime, backupTime } = require('./time');
 const neutralize = require('./neutralize');
-const { getCountries, getSpawns, getSpawn, getCaught, getFirstCaught, getLastCaught } = require('./getters');
-const { newSpawn, solve, addToCountrydex } = require('./setters');
+const { getCountries, getSpawns, getSpawn, getCaught, getFirstCaught, getLastCaught, getUserLanguage } = require('./getters');
+const { newSpawn, solve, addToCountrydex, setUserLanguage } = require('./setters');
 const { backup } = require('./backup');
 
 module.exports = {
@@ -13,7 +13,7 @@ module.exports = {
     adlog,
     h, m, s, spawnTime, backupTime,
     neutralize,
-    getCountries, getSpawns, getSpawn, getCaught, getFirstCaught, getLastCaught,
-    newSpawn, solve, addToCountrydex,
+    getCountries, getSpawns, getSpawn, getCaught, getFirstCaught, getLastCaught, getUserLanguage,
+    newSpawn, solve, addToCountrydex, setUserLanguage,
     backup
 }

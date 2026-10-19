@@ -2,7 +2,7 @@ const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle, ActivityType
 const vibrant = require('node-vibrant');
 
 const {
-    adlog, m, h, spawnTime, backupTime, getCountries, getSpawn, newSpawn, backup
+    adlog, m, h, spawnTime, backupTime, getCountries, getSpawn, newSpawn, backup, pdo
 } = require('../functions/import');
 
 const { emojis, colors } = require('../../data/utils.json');
@@ -14,6 +14,15 @@ module.exports = {
     
     async execute(client) {
         adlog('log', 'discord', `Connected to ${client.user.tag}`);
+
+        pdo.connect((err, client, done) => {
+            if (err) {
+                adlog('error', 'pgsql', err);
+            } else {
+                done();
+                adlog('log', 'pgsql', 'Connected to database');
+            }
+        })
         
         const countries = await getCountries();
         
@@ -71,8 +80,8 @@ module.exports = {
     
         setTimeout(() => {
             spawnCountry();
-            setInterval(spawnCountry, h(1));
-        }, spawnTime());
+            setInterval(spawnCountry, m(1));
+        }, 1);
     
         setTimeout(() => {
             backup();
