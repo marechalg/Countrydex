@@ -4,7 +4,7 @@ const { Routes } = require('discord-api-types/v10');
 const fs = require('node:fs');
 const moment = require('moment');
 
-const { adlog, m } = require('./functions/import');
+const { adlog, m, pdo } = require('./functions/import');
 
 const { keys, ids } = require('../data/config.json');
 

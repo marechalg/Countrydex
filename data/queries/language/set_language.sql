@@ -1,0 +1,1 @@
+insert into countrydex._language (user_id, language) values ($1, $2);

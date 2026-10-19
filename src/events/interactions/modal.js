@@ -12,7 +12,7 @@ module.exports = {
             const answer = interaction.fields.getTextInputValue('guess_input');
             const spawn = await getSpawn(interaction.channel.id);
 
-            if (neutralize(spawn.name) == neutralize(answer) || neutralize(spawn.code) == neutralize(answer)) {
+            if (neutralize(spawn.name_en) == neutralize(answer) || neutralize(spawn.name_fr) == neutralize(answer) || neutralize(spawn.code) == neutralize(answer)) {
                 new vibrant(`https://flagpedia.net/data/flags/w1160/${spawn.code}.jpg`).getPalette()
                     .then(pal => pal.Vibrant?.hex || colors.DEFAULT)
                     .catch(err => {
@@ -22,7 +22,7 @@ module.exports = {
                     .then(async color => {
                         const embed = new EmbedBuilder()
                             .setTitle(`Found by ${interaction.member.user.username}`)
-                            .setDescription(`The flag was **${spawn.name}**`)
+                            .setDescription(`The flag was **${spawn.name_en}**`)
                             .setImage(`https://flagpedia.net/data/flags/w1160/${spawn.code}.webp`)
                             .setColor(`${color}`)
                         const button = new ButtonBuilder()

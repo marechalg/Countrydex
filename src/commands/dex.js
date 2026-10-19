@@ -3,7 +3,7 @@ const {
 } = require('discord.js');
 const fs = require('node:fs');
 
-const { pdo, getCountries } = require('../functions/import');
+const { pdo, getCountries, getUserLanguage } = require('../functions/import');
 
 const { images } = require('../../data/utils.json');
 
@@ -30,26 +30,32 @@ module.exports = {
         ] })
 
         let uniq = await pdo.query(fs.readFileSync('data/queries/dex_countries_uniq_sorted.sql', 'utf-8'), [interaction.user.id]);
+
+        const lang = getUserLanguage(interaction.user.id);
+
+        uniq.rows.sort((a, b) => {
+            const nameA = lang === 'fr' ? a.name_fr : a.name_en;
+            const nameB = lang === 'fr' ? b.name_fr : b.name_en;
+            return nameA.localeCompare(nameB);
+        });
+
+        const itemsPerPage = 25;
+        const pages = Math.ceil(uniq.rows.length / itemsPerPage);
+
         const embed = new EmbedBuilder()
             .setAuthor({
                 name: `${interaction.user.tag}'s Countrydex`,
-                iconURL: `${images.DEX}`,
+                iconURL: images.DEX,
             })
             .addFields({
                 name: 'Collection',
-                value: `**${uniq.rowCount}**/${countries.rowCount} (${((uniq.rowCount / countries.rowCount ) * 100).toFixed(0)}%)`
-            })
-        ;
+                value: `**${dex.rowCount}**/${countries.rowCount} (${Math.round((dex.rowCount / countries.rowCount) * 100)}%)`
+            });
 
-        let components = []
-
-        const pages = Math.ceil(uniq.rowCount / 25);
-
-        let rows = []
-
-        for (const f of uniq.rows.slice(0, 25)) {
+        let rows = [];
+        for (const f of uniq.rows.slice(0, itemsPerPage)) {
             rows.push(new StringSelectMenuOptionBuilder()
-                .setLabel(`[${f.code}] ${f.name}`)
+                .setLabel(`[${f.code}] ${lang === 'fr' ? f.name_fr : f.name_en}`)
                 .setValue(`${f.code}`)
             )
         }
@@ -59,11 +65,11 @@ module.exports = {
             .setPlaceholder('List of collected flags')
             .addOptions(rows)
         )
-
-        components.push(selectionMenu);
         
+        const components = [selectionMenu];
+
         if (pages > 1) {
-            embed.setFooter({ text: `Page 1/${pages}` });
+            embed.setFooter({ text: `Page ${page + 1}/${pages}` });
 
             const navigationRow = new ActionRowBuilder().addComponents(
                 new ButtonBuilder()

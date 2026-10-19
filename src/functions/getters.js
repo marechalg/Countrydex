@@ -31,6 +31,11 @@ async function getLastCaught(userId, code) {
     return time.rows[0];
 }
 
+async function getUserLanguage(userId) {
+    const language = await pdo.query(fs.readFileSync('data/queries/language/user_language.sql', 'utf-8'), [userId]);
+    return language.rows[0];
+}
+
 module.exports = {
-    getCountries, getSpawns, getSpawn, getCaught, getFirstCaught, getLastCaught
+    getCountries, getSpawns, getSpawn, getCaught, getFirstCaught, getLastCaught, getUserLanguage
 }

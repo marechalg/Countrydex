@@ -1,0 +1,1 @@
+select language from countrydex._language where user_id = $1;

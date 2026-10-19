@@ -1,0 +1,1 @@
+update countrydex._language set language = $2 where user_id = $1;

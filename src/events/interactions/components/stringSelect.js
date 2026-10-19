@@ -2,13 +2,15 @@ const fs = require('node:fs');
 const { EmbedBuilder } = require('discord.js');
 const vibrant = require('node-vibrant');
 
-const { pdo, getFirstCaught, getLastCaught, getCaught } = require('../../../functions/import');
+const { pdo, getFirstCaught, getLastCaught, getCaught, getUserLanguage } = require('../../../functions/import');
 
 const { images, colors } = require('../../../../data/utils.json');
 
 module.exports = {
     async execute(interaction, client) {
         await interaction.deferUpdate();
+
+        const lang = await getUserLanguage(interaction.user.id);
         
         const selected = interaction.values[0];
         const user = interaction.customId.split('_')[1] || interaction.user.id;
@@ -39,9 +41,9 @@ module.exports = {
                 interaction.message.edit({ embeds: [new EmbedBuilder()
                     .setAuthor({
                         iconURL: `${images.GLOBE}`,
-                        name: `[${selected}] ${country.rows[0].name}`
+                        name: `[${selected}] ${lang.language === 'fr' ? country.rows[0].name_fr : country.rows[0].name_en}`
                     })
-                    .setDescription(`${country.rows[0].description}`)
+                    .setDescription(`${lang.language === 'fr' ? country.rows[0].desc_fr : country.rows[0].desc_en}`)
                     .addFields([
                         {
                             name: 'First time caught',
