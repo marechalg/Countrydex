@@ -2,12 +2,32 @@ const { name, version } = require('../package.json');
 const { keys } = require('../data/config.json');
 const { delay, pdo, adlog } = require('../src/functions/import');
 const axios = require('axios');
+const fs = require('node:fs');
 
 const countries = require('../data/countries.json');
 
 const header = `${name}/${version} (${keys.MAIL})`;
 
 (async () => {
+    try {
+        await pdo.query(fs.readFileSync('data/tables/language.sql', 'utf-8'));
+        adlog('log', 'table-creation', 'Created table _language');
+    } catch (err) {
+        adlog('error', 'table-creation', err);
+    }
+
+    try {
+        await pdo.query(`alter table countrydex._country
+            add column name_fr varchar(128),
+            add column name_en varchar(128),
+            add column desc_fr text,
+            add column desc_en text
+        `);
+        adlog('log', 'col-creation', 'Added columns name_fr, name_en, desc_fr, desc_en');
+    } catch (err) {
+        adlog('error', 'col-creation', err);
+    }
+
     for (const country of countries) {
         try {
             const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(country.name_en)}`;
@@ -39,12 +59,13 @@ const header = `${name}/${version} (${keys.MAIL})`;
             adlog('error', 'insertion', `[${country.code}] ${err.message}`);
         }
 
-        try {
-            await pdo.query('alter table countrydex._country drop column name, drop column description');
-        } catch (err) {
-            adlog('error', 'deletion', err);
-        }
-
         await delay(250);
+    }
+
+    try {
+        await pdo.query('alter table countrydex._country drop column name, drop column description');
+        adlog('log', 'col-deletion', 'Deleted colmuns name and description');
+    } catch (err) {
+        adlog('error', 'col-deletion', err);
     }
 })();
