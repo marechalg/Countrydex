@@ -13,12 +13,14 @@ Countrydex spawns flags from around the world in your Discord server. Race to id
 - 🏆 **Global leaderboard** - Compete on completion rate, collection size, and speed
 - 📊 **Personal stats** - Track your progress with `/dex`
 - 💾 **Reliable data** - Database backed up daily
+- 🌍 **Multi-language** - Guess the flags in english or french
 
 ## 🛠️ Commands
 
 | Command | Description |
 |---------|-------------|
 | `/help` | Display all available commands |
+| `/language` | Change your prefered language (english by default) |
 | `/dex` | View your complete flag collection and stats |
 | `/lb` | Check the global leaderboard |
 | `/clear [1-99]` | Clear messages (requires `MANAGE_MESSAGES`) |
@@ -33,7 +35,7 @@ Countrydex spawns flags from around the world in your Discord server. Race to id
 
 - **Database**: PostgreSQL
 
-- **Libraries**: 
+- **Dependencies**: 
   - node-vibrant (color extraction)
   - moment (time handling)
   - axios (HTTP requests)
@@ -46,9 +48,10 @@ you can find more details into [packages file](package.json)
 ## 🎮 How to Play
 
 1. Add Countrydex to your Discord server
-2. Flags will spawn automatically in designated channels
-3. Click the pop-up and guess the country (name or code)
-4. Build your collection and compete globally
+2. Change your language if needed (english by default)
+3. Flags will spawn automatically in designated channels
+4. Click the pop-up and guess the country (name or code)
+5. Build your collection and compete globally
 
 ## 📦 Installation
 
