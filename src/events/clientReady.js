@@ -2,7 +2,8 @@ const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle, ActivityType
 const vibrant = require('node-vibrant');
 
 const {
-    adlog, m, h, spawnTime, backupTime, getCountries, getSpawn, newSpawn, backup, pdo
+    adlog, m, h, spawnTime, backupTime, getCountries, getSpawn, newSpawn, backup, pdo,
+    getSpawns
 } = require('../functions/import');
 
 const { emojis, colors } = require('../../data/utils.json');
@@ -33,9 +34,12 @@ module.exports = {
             });
         }, m(1));
         
-        function spawnCountry() {
-            client.channels.cache.filter(chnl => chnl.isTextBased() && chnl.name?.toLowerCase().includes(SPAWN)).forEach(async spawnChnl => {
-                const spawnId = spawnChnl.id;
+        async function spawnCountry() {
+            const spawnChannels = await getSpawns();
+
+            spawnChannels.rows.forEach(async row => {
+                const spawnId = row.channel;
+                const spawnChnl = client.channels.cache.get(spawnId);
                 const spawn = await getSpawn(spawnId);
                 
                 if (spawn != null && !spawn.solved) {
@@ -80,8 +84,8 @@ module.exports = {
     
         setTimeout(() => {
             spawnCountry();
-            setInterval(spawnCountry, h(1));
-        }, spawnTime());
+            setInterval(spawnCountry, m(1));
+        }, 0);
     
         setTimeout(() => {
             backup();

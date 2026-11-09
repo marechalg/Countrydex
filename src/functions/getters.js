@@ -36,6 +36,11 @@ async function getUserLanguage(userId) {
     return language.rows[0];
 }
 
+async function getSpawns() {
+    const spawns = await pdo.query('select channel from countrydex._spawn');
+    return spawns;
+}
+
 module.exports = {
-    getCountries, getSpawns, getSpawn, getCaught, getFirstCaught, getLastCaught, getUserLanguage
+    getCountries, getSpawns, getSpawn, getCaught, getFirstCaught, getLastCaught, getUserLanguage, getSpawns
 }
