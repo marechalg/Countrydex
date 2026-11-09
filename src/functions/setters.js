@@ -60,6 +60,24 @@ async function setUserLanguage(userId, lang) {
     }
 }
 
+async function setSpawn(serverId, channelId) {
+    const exists = await pdo.query('select 1 from countrydex._spawn where server = $1', [serverId]);
+
+    if (exists) {
+        try {
+            await pdo.query('update countrydex._spawn set channel = $1 where server = $2', [channelId, serverId]);
+        } catch (err) {
+            adlog('error', 'pgsql', err.stack);
+        }
+    } else {
+        try {
+            await pdo.query('insert into countrydex._spawn (server, channel) values ($1, $2)', [serverId, channelId]);
+        } catch (err) {
+            adlog('error', 'pgsql', err.stack);
+        }
+    } 
+}
+
 module.exports = {
-    newSpawn, solve, addToCountrydex, setUserLanguage
+    newSpawn, solve, addToCountrydex, setUserLanguage, setSpawn
 }
