@@ -6,6 +6,7 @@ const neutralize = require('./neutralize');
 const { getCountries, getSpawns, getSpawn, getCaught, getFirstCaught, getLastCaught, getUserLanguage } = require('./getters');
 const { newSpawn, solve, addToCountrydex, setUserLanguage, setSpawn } = require('./setters');
 const { backup } = require('./backup');
+const { LB_TYPES, buildLeaderboardEmbed } = require('./leaderboard');
 
 module.exports = {
     delay,
@@ -15,5 +16,6 @@ module.exports = {
     neutralize,
     getCountries, getSpawns, getSpawn, getCaught, getFirstCaught, getLastCaught, getUserLanguage, getSpawns,
     newSpawn, solve, addToCountrydex, setUserLanguage, setSpawn,
-    backup
+    backup,
+    LB_TYPES, buildLeaderboardEmbed
 }

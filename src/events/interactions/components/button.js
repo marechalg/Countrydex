@@ -2,10 +2,7 @@ const fs = require('node:fs');
 const { 
     EmbedBuilder, ModalBuilder, ActionRowBuilder, ButtonBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ButtonStyle, TextInputBuilder, TextInputStyle
 } = require('discord.js');
-
-const { pdo, getCountries } = require('../../../functions/import');
-
-const { images } = require('../../../../data/utils.json');
+const { pdo, getCountries, LB_TYPES, buildLeaderboardEmbed } = require('../../../functions/import');
 
 module.exports = {
     async execute(interaction, client) {
@@ -111,184 +108,40 @@ module.exports = {
             await interaction.update({ embeds: [embed], components: [selectionMenu, navigationRow]});
         }
 
-        // COMPLETIONNIST LEADERBOARD 
-        if (interaction.customId == 'lb_completion') {
-            const leaderboard = await pdo.query(fs.readFileSync('data/queries/leaderboard_unique.sql', 'utf-8'));
+        // LEADERBOARDS
+        const isScopeBtn = id => id.startsWith('lb_scope_');
+        if (interaction.customId in LB_TYPES || isScopeBtn(interaction.customId)) {
+            await interaction.deferUpdate();
 
-            let embed = new EmbedBuilder()
-                .setColor('Blurple')
-                .setAuthor({
-                    iconURL: `${images.PODIUM}`,
-                    name: 'Leaderboard'
-                })
-                .setFooter({
-                    text: 'Completion Leaderboard'
-                });
-        
-            let i = 1;
-            for (const userInfos of leaderboard.rows.slice(0, 10)) {
-                let place;
-                switch (i) {
-                    case 1:
-                        place = '🏆';
-                        break;
-                    case 2:
-                        place = '🥈';
-                        break;
-                    case 3:
-                        place = '🥉';
-                        break;
-                    default:
-                        place = '#' + i;
-                        break;
-                }
+            try {
+                const buttons = interaction.message.components.flatMap(r => r.components);
 
-                const user = await client.users.fetch(userInfos.owner);
-                embed.addFields({
-                    name: `${place} ${user.username}`,
-                    value: `**${Math.floor(userInfos.count * 100 / countries.rowCount)}**% *(${userInfos.count}/${countries.rowCount})*`
-                })
+                const switchTarget = buttons.find(b => isScopeBtn(b.customId)).customId.replace('lb_scope_', '');
+                const currentScope = switchTarget === 'global' ? 'local' : 'global';
 
-                i++;
+                const type = interaction.customId in LB_TYPES
+                    ? interaction.customId
+                    : buttons.find(b => b.disabled && b.customId in LB_TYPES)?.customId ?? 'lb_completion';
+                const scope = isScopeBtn(interaction.customId) ? switchTarget : currentScope;
+
+                const embed = await buildLeaderboardEmbed(client, interaction.guild, type, scope);
+
+                const nextScope = scope === 'global' ? 'local' : 'global';
+                const components = interaction.message.components.map(row =>
+                    new ActionRowBuilder().addComponents(row.components.map(b => {
+                        const btn = ButtonBuilder.from(b);
+                        if (isScopeBtn(b.customId)) {
+                            return btn.setCustomId(`lb_scope_${nextScope}`).setLabel(`Switch to ${nextScope}`);
+                        }
+                        const active = b.customId === type;
+                        return btn.setDisabled(active).setStyle(active ? ButtonStyle.Secondary : ButtonStyle.Primary);
+                    }))
+                );
+
+                await interaction.editReply({ embeds: [embed], components });
+            } catch (e) {
+                console.error(e);
             }
-
-            const row = new ActionRowBuilder();
-            for (const button of interaction.message.components[0].components) {
-                const btn = ButtonBuilder.from(button);
-                if (button.customId === 'lb_completion') {
-                    btn.setDisabled(true);
-                    btn.setStyle(ButtonStyle.Secondary);
-                } else {
-                    btn.setDisabled(false);
-                    btn.setStyle(ButtonStyle.Primary);
-                }
-                row.addComponents(btn);
-            }
-
-            await interaction.update({
-                embeds: [embed],
-                components: [row]
-            });
-        }
-
-        // COLLECTOR LEADERBOAD
-        if (interaction.customId == 'lb_collection') {
-            const leaderboard = await pdo.query(fs.readFileSync('data/queries/leaderboard_all.sql', 'utf-8'));
-
-            let embed = new EmbedBuilder()
-                .setColor('Blurple')
-                .setAuthor({
-                    iconURL: `${images.PODIUM}`,
-                    name: 'Leaderboard'
-                })
-                .setFooter({
-                    text: 'Collector Leaderboard'
-                });
-        
-            let i = 1;
-            for (const userInfos of leaderboard.rows.slice(0, 10)) {
-                let place;
-                switch (i) {
-                    case 1:
-                        place = '🏆';
-                        break;
-                    case 2:
-                        place = '🥈';
-                        break;
-                    case 3:
-                        place = '🥉';
-                        break;
-                    default:
-                        place = '#' + i;
-                        break;
-                }
-
-                const user = await client.users.fetch(userInfos.owner);
-                embed.addFields({
-                    name: `${place} ${user.username}`,
-                    value: `**${userInfos.count}** flags caught`
-                })
-
-                i++;
-            }
-
-            const row = new ActionRowBuilder();
-            for (const button of interaction.message.components[0].components) {
-                const btn = ButtonBuilder.from(button);
-                if (button.customId === 'lb_collection') {
-                    btn.setDisabled(true);
-                    btn.setStyle(ButtonStyle.Secondary);
-                } else {
-                    btn.setDisabled(false);
-                    btn.setStyle(ButtonStyle.Primary);
-                }
-                row.addComponents(btn);
-            }
-
-            await interaction.update({
-                embeds: [embed],
-                components: [row]
-            });
-        }
-
-        // SPEED LEADERBOAD
-        if (interaction.customId == 'lb_quick_draw') {
-            const leaderboard = await pdo.query(fs.readFileSync('data/queries/leaderboard_quick.sql', 'utf-8'));
-
-            let embed = new EmbedBuilder()
-                .setColor('Blurple')
-                .setAuthor({
-                    iconURL: `${images.PODIUM}`,
-                    name: 'Leaderboard'
-                })
-                .setFooter({
-                    text: 'Speed Leaderboard'
-                });
-        
-            let i = 1;
-            for (const userInfos of leaderboard.rows.slice(0, 10)) {
-                let place;
-                switch (i) {
-                    case 1:
-                        place = '🏆';
-                        break;
-                    case 2:
-                        place = '🥈';
-                        break;
-                    case 3:
-                        place = '🥉';
-                        break;
-                    default:
-                        place = '#' + i;
-                        break;
-                }
-
-                const user = await client.users.fetch(userInfos.owner);
-                embed.addFields({
-                    name: `${place} ${user.username}`,
-                    value: `**${Math.floor(userInfos.avg)}** min`
-                })
-
-                i++;
-            }
-
-            const row = new ActionRowBuilder();
-            for (const button of interaction.message.components[0].components) {
-                const btn = ButtonBuilder.from(button);
-                if (button.customId === 'lb_quick_draw') {
-                    btn.setDisabled(true);
-                    btn.setStyle(ButtonStyle.Secondary);
-                } else {
-                    btn.setDisabled(false);
-                    btn.setStyle(ButtonStyle.Primary);
-                }
-                row.addComponents(btn);
-            }
-
-            await interaction.update({
-                embeds: [embed],
-                components: [row]
-            });
         }
     }
 }

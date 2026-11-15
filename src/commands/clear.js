@@ -6,14 +6,14 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('clear')
         .setDescription('Clear a N number of messages')
+        .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
         .addStringOption(new SlashCommandStringOption()
             .setName('number')
             .setDescription('Number of messages to delete')
             .setRequired(true)
         ),
     async execute(interaction, client) {
-        const num = interaction.options.getString('number');
-        if (!interaction.member.permissions.has(PermissionFlagsBits.ManageMessages)) return interaction.reply({ embeds: [new EmbedBuilder()
+        if (!interaction.memberPermissions?.has(PermissionFlagsBits.ManageMessages)) return interaction.reply({ embeds: [new EmbedBuilder()
             .setAuthor({
                 name: 'Error',
                 iconURL: `${images.ERROR}`
@@ -24,6 +24,8 @@ module.exports = {
             })
             .setColor('Red')
         ], flags: MessageFlags.Ephemeral })
+
+        const num = interaction.options.getString('number');
 
         if (isNaN(num) || num < 1 || num > 99) return interaction.reply({ embeds: [new EmbedBuilder()
             .setAuthor({
@@ -45,7 +47,7 @@ module.exports = {
                     name: `Successfully deleted ${num} messages`,
                     iconURL: `${images.SUCCESS}`
                 })
-            ], flags: MessageFlags.Ephemeral})
+            ], flags: MessageFlags.Ephemeral })
         } catch (err) {
             interaction.reply({ embeds: [new EmbedBuilder()
                 .setColor('Red')
@@ -66,7 +68,7 @@ module.exports = {
                 .setFooter({
                     text: 'If you think that it\'s something else, please contact a developer'
                 })
-            ]})
+            ], flags: MessageFlags.Ephemeral })
         }
     }
 }
