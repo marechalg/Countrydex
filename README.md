@@ -20,10 +20,11 @@ Countrydex spawns flags from around the world in your Discord server. Race to id
 | Command | Description |
 |---------|-------------|
 | `/help` | Display all available commands |
-| `/language` | Change your prefered language (english by default) |
+| `/language {"lang"}` | Change your prefered language (english by default) |
+| `/setspawn` | Set the server flags spawning channel |
 | `/dex` | View your complete flag collection and stats |
-| `/lb` | Check the global leaderboard |
-| `/clear [1-99]` | Clear messages (requires `MANAGE_MESSAGES`) |
+| `/leaderboard {local-global}` | Check the server or global leaderboards (local without any parameter) |
+| `/clear {1-99}` | Clear messages (requires `MANAGE_MESSAGES`) |
 | `/ping` | Display latency and uptime |
 | `/reset` | Reset your progression (⚠️ irreversible for now) |
 
@@ -51,7 +52,7 @@ you can find more details into [packages file](package.json)
 2. Change your language if needed (english by default)
 3. Flags will spawn automatically in designated channels
 4. Click the pop-up and guess the country (name or code)
-5. Build your collection and compete globally
+5. Build your collection and compete against the servers members and players across the globe
 
 ## 📦 Installation
 
