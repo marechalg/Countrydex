@@ -1,4 +1,4 @@
-const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle, ActivityType, PermissionFlagsBits } = require('discord.js');
+const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle, ActivityType, PermissionFlagsBits, AttachmentBuilder } = require('discord.js');
 const vibrant = require('node-vibrant');
 
 const {
@@ -53,27 +53,42 @@ module.exports = {
                 }
                 
                 const country = countries.rows[Math.floor(Math.random() * countries.rowCount)];
-                
-                new vibrant(`https://flagpedia.net/data/flags/w1160/${country.code}.jpg`).getPalette()
+                const flagUrl = `https://flagpedia.net/data/flags/w1160/${country.code}.webp`;
+
+                const randomName = Math.random().toString(36).substring(2, 8) + '.webp';
+
+                const paletteUrl = `https://flagcdn.com/w320/${country.code}.png`;
+                new vibrant(paletteUrl).getPalette()
                     .then(pal => pal.Vibrant?.hex || colors.DEFAULT)
                     .catch(err => {
                         adlog('error', 'node-vibrant', err.stack);
                         return colors.DEFAULT;
                     })
                     .then(async color => {
+                        const res = await fetch(flagUrl);
+                        const buffer = Buffer.from(await res.arrayBuffer());
+
+                        const attachment = new AttachmentBuilder(buffer, { name: randomName });
+
                         const embed = new EmbedBuilder()
-                            .setImage(`https://flagpedia.net/data/flags/w1160/${country.code}.webp`)
+                            .setImage(`attachment://${randomName}`)
                             .setColor(color);
+
                         const button = new ButtonBuilder()
                             .setCustomId('guess_button')
                             .setLabel('Guess')
                             .setStyle(ButtonStyle.Secondary)
                             .setEmoji(`${emojis.MAG}`);
+                        
                         const row = new ActionRowBuilder().addComponents(button);
                         
                         const clientAsMember = await spawnChnl.guild.members.fetchMe();
                         if (clientAsMember.permissions.has(PermissionFlagsBits.SendMessages)) {
-                            return spawnChnl.send({ embeds: [embed], components: [row] }).then(msg => {
+                            return spawnChnl.send({ 
+                                embeds: [embed], 
+                                components: [row],
+                                files: [attachment]
+                            }).then(msg => {
                                 newSpawn(spawnChnl.id, msg.id, country.code);
                             })
                         }
