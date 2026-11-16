@@ -1,3 +1,3 @@
-# CountryDex v1.2.1
+# CountryDex v1.2.2
 ## Fixed
-- Spawns : the image name is now randomly generated instead of the country code, being an easy hint
+- Duplicating flag when guessing the flag
