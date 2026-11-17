@@ -41,6 +41,11 @@ async function getSpawns() {
     return spawns;
 }
 
+async function getStats() {
+    const stats = await pdo.query('select * from countrydex.stats');
+    return stats;
+}
+
 module.exports = {
-    getCountries, getSpawns, getSpawn, getCaught, getFirstCaught, getLastCaught, getUserLanguage, getSpawns
+    getCountries, getSpawns, getSpawn, getCaught, getFirstCaught, getLastCaught, getUserLanguage, getSpawns, getStats
 }
