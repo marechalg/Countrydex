@@ -26,13 +26,12 @@ Countrydex spawns flags from around the world in your Discord server. Race to id
 | `/leaderboard {local-global}` | Check the server or global leaderboards (local without any parameter) |
 | `/clear {1-99}` | Clear messages (requires `MANAGE_MESSAGES`) |
 | `/ping` | Display latency and uptime |
+| `/stats` | Global statistics command |
 | `/reset` | Reset your progression (⚠️ irreversible for now) |
 
 ## 🚀 Tech Stack
 
 - **Runtime**: Node.js
-
-- **Framework**: discord.js
 
 - **Database**: PostgreSQL
 
@@ -41,6 +40,8 @@ Countrydex spawns flags from around the world in your Discord server. Race to id
   - moment (time handling)
   - axios (HTTP requests)
   - deepl-node (translations)
+  - pg (database)
+  - discord.js
 
 you can find more details into [packages file](package.json)
 
