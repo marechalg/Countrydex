@@ -1,4 +1,5 @@
 create table _spawn (
+    server bigint,
     channel bigint,
     message bigint,
     solved boolean,
@@ -7,5 +8,5 @@ create table _spawn (
     constraint fk_spawn_country foreign key
         (code) references _country(code),
     
-    primary key(channel)
+    primary key(server)
 );

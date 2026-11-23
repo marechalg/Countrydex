@@ -4,6 +4,7 @@ create or replace view leaderboard_unique as (
         from _in_countrydex
     ) as uniques
     group by owner
+    having count(code) >= 10
     order by count desc
 );
 
@@ -11,13 +12,19 @@ create or replace view leaderboard_all as (
     select owner, count(code)
     from _in_countrydex
     group by owner
+    having count(code) >= 10
     order by count desc
 );
 
+select owner, count(code) from countrydex._in_countrydex group by owner having count(code) >= 10;
+
 create or replace view leaderboard_quick as (
+    with ten as (
+        select owner, count(code) from countrydex._in_countrydex group by owner having count(code) >= 10
+    )
     select owner, avg(delta) from (
-        select owner, getMinutes(timestamp) as delta
-        from _in_countrydex
+        select t.owner, getMinutes(timestamp) as delta
+        from ten t left join countrydex._in_countrydex c on t.owner = c.owner
     ) as calculated
     group by owner
     order by avg asc
