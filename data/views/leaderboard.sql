@@ -1,7 +1,7 @@
 create or replace view leaderboard_unique as (
     select owner, count(code) from (
         select distinct owner, code
-        from _in_countrydex
+        from countrydex._in_countrydex
     ) as uniques
     group by owner
     having count(code) >= 10
@@ -10,13 +10,11 @@ create or replace view leaderboard_unique as (
 
 create or replace view leaderboard_all as (
     select owner, count(code)
-    from _in_countrydex
+    from countrydex._in_countrydex
     group by owner
     having count(code) >= 10
     order by count desc
 );
-
-select owner, count(code) from countrydex._in_countrydex group by owner having count(code) >= 10;
 
 create or replace view leaderboard_quick as (
     with ten as (
